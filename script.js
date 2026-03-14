@@ -398,10 +398,10 @@ function initTrinityNavigation() {
                 }
             });
 
-            // Highlight center point for SET zone
+            // Highlight center point for AXIS zone
             const centerPoint = document.querySelector('.center-point');
             if (centerPoint) {
-                if (zone === 'set') {
+                if (zone === 'axis') {
                     centerPoint.setAttribute('r', '6');
                     centerPoint.style.fill = '#2C2C2C';
                 } else {
