@@ -689,6 +689,79 @@ img {
     margin: 0 auto;
 }
 
+/* Collection Intro */
+.collection-intro {
+    max-width: 800px;
+    margin: 0 auto var(--space-xl);
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+}
+
+.collection-intro h3 {
+    font-family: var(--font-serif-en);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.collection-intro p {
+    font-family: var(--font-serif-cn);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 2.2;
+    color: var(--text-secondary);
+}
+
+/* Series Section */
+.series-section {
+    max-width: var(--max-width);
+    margin: 0 auto var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 0.5px solid var(--line-subtle);
+}
+
+.series-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.series-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 0.5px solid rgba(184, 150, 62, 0.25);
+}
+
+.series-title {
+    font-family: 'IM Fell English', var(--font-serif-en);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: #b8963e;
+}
+
+.series-glyph {
+    font-family: var(--font-serif-cn);
+    font-size: 0.9rem;
+    font-weight: 200;
+    color: rgba(184, 150, 62, 0.4);
+    letter-spacing: 0.1em;
+}
+
+.series-desc {
+    font-family: var(--font-serif-cn);
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text-light);
+    margin-bottom: var(--space-lg);
+    letter-spacing: 0.05em;
+}
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -781,6 +854,31 @@ img {
     font-family: var(--font-serif-cn);
     font-size: 1rem;
     font-weight: 300;
+    color: var(--text-secondary);
+}
+
+/* Heritage Intro */
+.heritage-intro {
+    max-width: 800px;
+    margin: 0 auto var(--space-xl);
+    text-align: center;
+    padding: var(--space-md);
+}
+
+.heritage-lead {
+    font-family: var(--font-serif-cn);
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    letter-spacing: 0.1em;
+}
+
+.heritage-text {
+    font-family: var(--font-serif-cn);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 2.2;
     color: var(--text-secondary);
 }
 
