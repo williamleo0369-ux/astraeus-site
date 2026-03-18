@@ -385,6 +385,17 @@ function initTrinityNavigation() {
         btn.addEventListener('click', () => {
             const zone = btn.dataset.zone;
 
+            // ═══ SHUTTER FLASH - 相机快门瞬间反色 (0.1s) ═══
+            btn.classList.add('shutter-active');
+            setTimeout(() => btn.classList.remove('shutter-active'), 100);
+
+            // ═══ STARFIELD GLITCH - 星轨高频震荡联动 ═══
+            const heroCircles = document.querySelector('.hero-circles');
+            if (heroCircles) {
+                heroCircles.classList.add('glitch-active');
+                setTimeout(() => heroCircles.classList.remove('glitch-active'), 250);
+            }
+
             // Toggle active state on button
             trinityBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');

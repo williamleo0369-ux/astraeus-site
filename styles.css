@@ -1652,6 +1652,135 @@ img {
 }
 
 /* ===================
+   Trinity Navigation - Category Buttons
+   黑底白字选中效果 · 直角矩形 · 瞬间反色
+   =================== */
+.trinity-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.trinity-btn {
+    /* 绝对直角矩形 - 严禁 border-radius */
+    border-radius: 0 !important;
+
+    /* 基础样式 */
+    background: transparent;
+    border: 0.5px solid rgba(26, 26, 26, 0.15);
+    font-family: 'IBM Plex Mono', 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    cursor: crosshair;
+    padding: 10px 25px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+
+    /* 瞬间过渡 - 相机快门感 (0.1s) */
+    transition: all 0.1s step-end;
+}
+
+/* 选中状态：绝对黑底白字 (The Blackout State) */
+.trinity-btn.active {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 0.5px solid #1a1a1a;
+    font-weight: 500;
+    /* 实体按键按下的极轻微阴影 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 悬停状态：边框加深 */
+.trinity-btn:hover:not(.active) {
+    border-color: #1a1a1a;
+    background: rgba(26, 26, 26, 0.05);
+}
+
+/* 点击闪烁动画 - 相机快门效果 */
+@keyframes shutter-flash {
+    0% { filter: invert(1); }
+    50% { filter: invert(0); }
+    100% { filter: invert(0); }
+}
+
+.trinity-btn.shutter-active {
+    animation: shutter-flash 0.1s ease-out;
+}
+
+/* ===================
+   Star Trail Glitch Effect
+   星轨高频震荡联动
+   =================== */
+@keyframes starfield-glitch {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    10% {
+        transform: translate(-2px, 1px) scale(1.002);
+        opacity: 0.9;
+    }
+    20% {
+        transform: translate(2px, -1px) scale(0.998);
+        opacity: 1;
+    }
+    30% {
+        transform: translate(-1px, 2px) scale(1.001);
+        opacity: 0.85;
+    }
+    40% {
+        transform: translate(1px, -2px) scale(0.999);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-2px, -1px) scale(1.003);
+        opacity: 0.9;
+    }
+    60% {
+        transform: translate(2px, 1px) scale(0.997);
+        opacity: 1;
+    }
+    70% {
+        transform: translate(-1px, -2px) scale(1.002);
+        opacity: 0.88;
+    }
+    80% {
+        transform: translate(1px, 2px) scale(0.998);
+        opacity: 1;
+    }
+    90% {
+        transform: translate(-2px, 0) scale(1.001);
+        opacity: 0.92;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes line-distortion {
+    0%, 100% { stroke-dashoffset: 0; }
+    25% { stroke-dashoffset: 3; }
+    50% { stroke-dashoffset: -2; }
+    75% { stroke-dashoffset: 4; }
+}
+
+.hero-circles.glitch-active .circles-svg {
+    animation: starfield-glitch 0.25s ease-out;
+}
+
+.hero-circles.glitch-active .circle-line {
+    stroke-dasharray: 5 2;
+    animation: line-distortion 0.15s linear 3;
+}
+
+.hero-circles.glitch-active .radial-line {
+    animation: line-distortion 0.1s linear 4;
+}
+
+/* ===================
    Responsive - New Components
    =================== */
 @media (max-width: 768px) {
