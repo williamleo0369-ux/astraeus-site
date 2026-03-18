@@ -1207,7 +1207,8 @@ img {
 }
 
 /* ===================
-   Modal
+   Modal - Immersive Asymmetric Layout
+   沉浸式非对称布局
    =================== */
 .modal {
     position: fixed;
@@ -1217,12 +1218,10 @@ img {
     bottom: 0;
     z-index: 1000;
     display: none;
-    align-items: center;
-    justify-content: center;
 }
 
 .modal.active {
-    display: flex;
+    display: block;
 }
 
 .modal-backdrop {
@@ -1231,63 +1230,78 @@ img {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(250, 250, 248, 0.98);
-    backdrop-filter: blur(20px);
+    background: #FFFFFF;
 }
 
 .modal-content {
     position: relative;
-    width: 90%;
-    max-width: 1000px;
-    max-height: 90vh;
-    background: var(--bg-pure);
-    border: 0.5px solid var(--line-medium);
-    overflow-y: auto;
+    width: 100%;
+    height: 100vh;
+    background: #FFFFFF;
+    overflow: hidden;
     z-index: 1;
 }
 
 .modal-close {
-    position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
+    position: fixed;
+    top: var(--space-lg);
+    right: var(--space-lg);
     background: none;
-    border: none;
+    border: 0.5px solid var(--line-medium);
     cursor: pointer;
-    padding: var(--space-xs);
+    padding: var(--space-sm);
     color: var(--text-secondary);
-    transition: color 0.3s ease;
-    z-index: 10;
+    transition: all 0.2s ease;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-close:hover {
     color: var(--text-primary);
+    border-color: var(--text-primary);
 }
 
+/* ═══ Immersive Grid: 68% Left / 32% Right ═══ */
 .modal-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 70vh;
+    grid-template-columns: 68fr 32fr;
+    height: 100vh;
 }
 
+/* ═══ Primary Gallery (Left 68%) ═══ */
 .modal-image-section {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-xl);
+    background: #FFFFFF;
+    padding: 5%;
+    overflow-y: auto;
     border-right: 0.5px solid var(--line-subtle);
 }
 
 .modal-image {
-    max-width: 100%;
-    max-height: 50vh;
+    max-width: 90%;
+    max-height: 85vh;
     object-fit: contain;
+    /* 无感瞬间切换 */
+    transition: opacity 0.1s ease-out;
 }
 
+/* ═══ Technical Panel (Right 32%) - Sticky ═══ */
 .modal-info-section {
-    padding: var(--space-xl);
+    padding: var(--space-xl) var(--space-lg);
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: #FFFFFF;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
 }
 
 .modal-ref {
@@ -1429,13 +1443,40 @@ img {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Mobile: 流式布局 */
     .modal-grid {
         grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
     }
 
     .modal-image-section {
         border-right: none;
         border-bottom: 0.5px solid var(--line-subtle);
+        height: 60vh;
+        padding: var(--space-lg);
+        /* 双指放大支持 */
+        touch-action: pinch-zoom;
+        overflow: hidden;
+    }
+
+    .modal-image {
+        max-height: 55vh;
+        /* 启用双指缩放 */
+        touch-action: manipulation;
+    }
+
+    .modal-info-section {
+        position: relative;
+        height: auto;
+        padding: var(--space-lg);
+    }
+
+    .modal-close {
+        top: var(--space-md);
+        right: var(--space-md);
+        width: 36px;
+        height: 36px;
     }
 }
 
