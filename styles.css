@@ -211,6 +211,17 @@ img {
     max-width: 600px;
 }
 
+.hero-philosophy {
+    font-family: var(--font-serif-en);
+    font-size: 0.85rem;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-top: var(--space-md);
+    opacity: 0.8;
+}
+
 .hero-location {
     display: flex;
     align-items: center;
