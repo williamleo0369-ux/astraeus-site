@@ -64,10 +64,11 @@
             </svg>
             <span class="nav-title">ASTRAEUS & CO.</span>
         </div>
-        <div class="nav-menu trinity-nav">
-            <button class="trinity-btn" data-zone="axis">[ Axis 立 ]</button>
-            <button class="trinity-btn" data-zone="lattice">[ Lattice 格 ]</button>
-            <button class="trinity-btn" data-zone="cipher">[ Cipher 识 ]</button>
+        <div class="nav-menu">
+            <a href="#maison" class="nav-link" data-en="Maison" data-cn="世家">Maison</a>
+            <a href="#collection" class="nav-link" data-en="Collection" data-cn="典藏">Collection</a>
+            <a href="#heritage" class="nav-link" data-en="Héritage" data-cn="传承">Héritage</a>
+            <a href="#contact" class="nav-link" data-en="Contact" data-cn="私洽">Contact</a>
         </div>
         <div class="nav-actions">
             <!-- Language Switcher -->
@@ -172,184 +173,158 @@
     <section class="collection" id="collection">
         <div class="collection-header">
             <span class="section-label">COLLECTION · 典藏系列</span>
-            <h2 class="collection-title">THE INTELLECTUAL TERMINALS</h2>
+            <h2 class="collection-title">THE ARCHIVE</h2>
             <div class="collection-line"></div>
         </div>
 
-        <!-- ═══ CIPHER 识 Series ═══ -->
-        <div class="series-section" id="cipher-series">
-            <div class="series-header">
-                <span class="series-title">Clara's Cipher · 灰金密语</span>
-                <span class="series-glyph">识</span>
-            </div>
-            <p class="series-desc" data-en="The cipher of celestial coordinates, binary codes, Hash algorithms, and deterministic laws." data-cn="天文坐标、二进制代码、Hash 算法、以及确定性的规律。">天文坐标、二进制代码、Hash 算法、以及确定性的规律。</p>
-            <div class="products-grid">
-                <!-- Cipher Product 1: 北斗坐标吊坠 -->
-                <article class="product-card" onclick="openProductModal('sextant-pendant')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/ASTRAEUS星座六分仪砖石吊坠.png" alt="Sextant Diamond Pendant" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CP-2026</span>
-                        <h3 class="product-name">Sextant Coordinates</h3>
-                        <span class="product-name-cn">识·北斗坐标</span>
-                    </div>
-                </article>
-                <!-- Cipher Product 2 -->
-                <article class="product-card" onclick="openProductModal('cipher-ring-1')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/ASTRAEUS现代简约戒指2.png" alt="Binary Code Ring" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CR-2026-A</span>
-                        <h3 class="product-name">Binary Inscription</h3>
-                        <span class="product-name-cn">识·二进制铭刻</span>
-                    </div>
-                </article>
-                <!-- Cipher Product 3 -->
-                <article class="product-card" onclick="openProductModal('cipher-ring-2')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/ASTRAEUS现代简约戒指3.png" alt="Geometric Cipher Ring" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CR-2026-B</span>
-                        <h3 class="product-name">Geometric Cipher</h3>
-                        <span class="product-name-cn">识·几何密码</span>
-                    </div>
-                </article>
-                <!-- Cipher Product 4 -->
-                <article class="product-card" onclick="openProductModal('cipher-necklace')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/ASTRAEUS现代简约项链4.png" alt="Axis Code Pendant" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CN-2026</span>
-                        <h3 class="product-name">Axis Code</h3>
-                        <span class="product-name-cn">识·轴线代码</span>
-                    </div>
-                </article>
-                <!-- Existing: Celestial Brooch -->
-                <article class="product-card" onclick="openProductModal('celestial-brooch')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/胸针.png..webp" alt="Celestial Globe Brooch" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CB-1764</span>
-                        <h3 class="product-name">Celestial Globe Brooch</h3>
-                        <span class="product-name-cn">识·天球仪胸针</span>
-                    </div>
-                </article>
-            </div>
+        <!-- Category Filter Buttons -->
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all" data-en="ALL" data-cn="全部">全部</button>
+            <button class="filter-btn" data-category="ring" data-en="RINGS" data-cn="戒指">戒指</button>
+            <button class="filter-btn" data-category="necklace" data-en="NECKLACES" data-cn="项链">项链</button>
+            <button class="filter-btn" data-category="bracelet" data-en="BRACELETS" data-cn="手镯">手镯</button>
+            <button class="filter-btn" data-category="brooch" data-en="BROOCHES" data-cn="胸针">胸针</button>
         </div>
 
-        <!-- ═══ AXIS 立 Series ═══ -->
-        <div class="series-section" id="axis-series">
-            <div class="series-header">
-                <span class="series-title">De Constellatione · 星座镶嵌</span>
-                <span class="series-glyph">立</span>
-            </div>
-            <p class="series-desc" data-en="The axis, the center, the unity of all things, and the ultimate balance of the physical world." data-cn="轴线、圆心、万物归一、以及物理世界的终极平衡。">轴线、圆心、万物归一、以及物理世界的终极平衡。</p>
-            <div class="products-grid">
-                <!-- Axis Product 1: 天球原点 -->
-                <article class="product-card" onclick="openProductModal('celestial-sphere')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/1773755290030.png" alt="Celestial Sphere Pendant" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. SP-2026</span>
-                        <h3 class="product-name">Celestial Origin</h3>
-                        <span class="product-name-cn">立·天球原点</span>
-                    </div>
-                </article>
-                <!-- Axis Product 2 -->
-                <article class="product-card" onclick="openProductModal('balance-pendant')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/ASTRAEUS现代简约项链3.png" alt="Geometric Balance Pendant" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. BP-2026</span>
-                        <h3 class="product-name">Geometric Equilibrium</h3>
-                        <span class="product-name-cn">立·几何平衡</span>
-                    </div>
-                </article>
-                <!-- Existing: Celestial Ring -->
-                <article class="product-card" onclick="openProductModal('celestial-ring')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/古法戒指.png" alt="Celestial Armillary Ring" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. AR-1778</span>
-                        <h3 class="product-name">Celestial Armillary Ring</h3>
-                        <span class="product-name-cn">立·天球浑仪戒指</span>
-                    </div>
-                </article>
-                <!-- Existing: Navigator's Signet -->
-                <article class="product-card" onclick="openProductModal('compass-ring')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/定制戒指.png" alt="Navigator's Signet" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. CR-2024</span>
-                        <h3 class="product-name">Navigator's Signet</h3>
-                        <span class="product-name-cn">立·航海家印戒</span>
-                    </div>
-                </article>
-            </div>
-        </div>
+        <!-- Unified Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- ═══ 戒指 RINGS ═══ -->
+            <article class="product-card" data-category="ring" onclick="openProductModal('celestial-ring')">
+                <div class="product-image-wrap">
+                    <img src="imgs/古法戒指.png" alt="Celestial Armillary Ring" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. AR-1778</span>
+                    <h3 class="product-name">Celestial Armillary Ring</h3>
+                    <span class="product-name-cn">天球浑仪戒指</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="ring" onclick="openProductModal('compass-ring')">
+                <div class="product-image-wrap">
+                    <img src="imgs/定制戒指.png" alt="Navigator's Signet" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CR-2024</span>
+                    <h3 class="product-name">Navigator's Signet</h3>
+                    <span class="product-name-cn">航海家印戒</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="ring" onclick="openProductModal('cipher-ring-1')">
+                <div class="product-image-wrap">
+                    <img src="imgs/ASTRAEUS现代简约戒指2.png" alt="Binary Inscription Ring" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CR-2026-A</span>
+                    <h3 class="product-name">Binary Inscription</h3>
+                    <span class="product-name-cn">二进制铭刻</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="ring" onclick="openProductModal('cipher-ring-2')">
+                <div class="product-image-wrap">
+                    <img src="imgs/ASTRAEUS现代简约戒指3.png" alt="Geometric Cipher Ring" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CR-2026-B</span>
+                    <h3 class="product-name">Geometric Cipher</h3>
+                    <span class="product-name-cn">几何密码</span>
+                </div>
+            </article>
 
-        <!-- ═══ LATTICE 格 Series ═══ -->
-        <div class="series-section" id="lattice-series">
-            <div class="series-header">
-                <span class="series-title">Ratio Instrument · 仪器几何</span>
-                <span class="series-glyph">格</span>
-            </div>
-            <p class="series-desc" data-en="The grid, the ratio, the architectural sense, and the order of mathematical aesthetics." data-cn="网格、比例（Ratio）、建筑感、以及数学美学的秩序。">网格、比例（Ratio）、建筑感、以及数学美学的秩序。</p>
-            <div class="products-grid">
-                <!-- Lattice Product 1: 建筑手镯 -->
-                <article class="product-card" onclick="openProductModal('architectural-cuff')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/雕塑感手镯2.png" alt="Architectural Cuff" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. AC-2026</span>
-                        <h3 class="product-name">Architectural Cuff</h3>
-                        <span class="product-name-cn">格·建筑腕饰</span>
-                    </div>
-                </article>
-                <!-- Existing: Aurora Hexagon -->
-                <article class="product-card" onclick="openProductModal('stellar-pendant')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/星芒项链.png" alt="Aurora Hexagon" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. SP-1919</span>
-                        <h3 class="product-name">Aurora Hexagon</h3>
-                        <span class="product-name-cn">格·极光六芒吊坠</span>
-                    </div>
-                </article>
-                <!-- Existing: Horological Cuff -->
-                <article class="product-card" onclick="openProductModal('astrolabe-bracelet')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/古法手环.png" alt="Horological Cuff" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. AB-1762</span>
-                        <h3 class="product-name">Horological Cuff</h3>
-                        <span class="product-name-cn">格·星象时计腕饰</span>
-                    </div>
-                </article>
-                <!-- Existing: Orrery Necklace -->
-                <article class="product-card" onclick="openProductModal('orrery-necklace')">
-                    <div class="product-image-wrap">
-                        <img src="imgs/中世纪复古项链.png.webp" alt="Orrery Grand Collier" class="product-image">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-ref">REF. ON-1768</span>
-                        <h3 class="product-name">Orrery Grand Collier</h3>
-                        <span class="product-name-cn">格·浑天仪项链</span>
-                    </div>
-                </article>
-            </div>
+            <!-- ═══ 项链 NECKLACES ═══ -->
+            <article class="product-card" data-category="necklace" onclick="openProductModal('sextant-pendant')">
+                <div class="product-image-wrap">
+                    <img src="imgs/ASTRAEUS星座六分仪砖石吊坠.png" alt="Sextant Diamond Pendant" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CP-2026</span>
+                    <h3 class="product-name">Sextant Coordinates</h3>
+                    <span class="product-name-cn">北斗坐标吊坠</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="necklace" onclick="openProductModal('cipher-necklace')">
+                <div class="product-image-wrap">
+                    <img src="imgs/ASTRAEUS现代简约项链4.png" alt="Axis Code Pendant" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CN-2026</span>
+                    <h3 class="product-name">Axis Code</h3>
+                    <span class="product-name-cn">轴线代码</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="necklace" onclick="openProductModal('celestial-sphere')">
+                <div class="product-image-wrap">
+                    <img src="imgs/1773755290030.png" alt="Celestial Sphere Pendant" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. SP-2026</span>
+                    <h3 class="product-name">Celestial Origin</h3>
+                    <span class="product-name-cn">天球原点</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="necklace" onclick="openProductModal('balance-pendant')">
+                <div class="product-image-wrap">
+                    <img src="imgs/ASTRAEUS现代简约项链3.png" alt="Geometric Balance Pendant" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. BP-2026</span>
+                    <h3 class="product-name">Geometric Equilibrium</h3>
+                    <span class="product-name-cn">几何平衡</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="necklace" onclick="openProductModal('stellar-pendant')">
+                <div class="product-image-wrap">
+                    <img src="imgs/星芒项链.png" alt="Aurora Hexagon" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. SP-1919</span>
+                    <h3 class="product-name">Aurora Hexagon</h3>
+                    <span class="product-name-cn">极光六芒吊坠</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="necklace" onclick="openProductModal('orrery-necklace')">
+                <div class="product-image-wrap">
+                    <img src="imgs/中世纪复古项链.png.webp" alt="Orrery Grand Collier" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. ON-1768</span>
+                    <h3 class="product-name">Orrery Grand Collier</h3>
+                    <span class="product-name-cn">浑天仪项链</span>
+                </div>
+            </article>
+
+            <!-- ═══ 手镯 BRACELETS ═══ -->
+            <article class="product-card" data-category="bracelet" onclick="openProductModal('astrolabe-bracelet')">
+                <div class="product-image-wrap">
+                    <img src="imgs/古法手环.png" alt="Horological Cuff" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. AB-1762</span>
+                    <h3 class="product-name">Horological Cuff</h3>
+                    <span class="product-name-cn">星象时计腕饰</span>
+                </div>
+            </article>
+            <article class="product-card" data-category="bracelet" onclick="openProductModal('architectural-cuff')">
+                <div class="product-image-wrap">
+                    <img src="imgs/雕塑感手镯2.png" alt="Architectural Cuff" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. AC-2026</span>
+                    <h3 class="product-name">Architectural Cuff</h3>
+                    <span class="product-name-cn">建筑腕饰</span>
+                </div>
+            </article>
+
+            <!-- ═══ 胸针 BROOCHES ═══ -->
+            <article class="product-card" data-category="brooch" onclick="openProductModal('celestial-brooch')">
+                <div class="product-image-wrap">
+                    <img src="imgs/胸针.png..webp" alt="Celestial Globe Brooch" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-ref">REF. CB-1764</span>
+                    <h3 class="product-name">Celestial Globe Brooch</h3>
+                    <span class="product-name-cn">天球仪胸针</span>
+                </div>
+            </article>
         </div>
     </section>
 

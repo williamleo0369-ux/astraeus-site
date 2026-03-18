@@ -118,6 +118,140 @@ const productData = {
             { value: '365.25', unit: '日周期' },
             { value: '0.01', unit: 'mm 加工公差' }
         ]
+    },
+    // ═══ New Products 2026 ═══
+    'sextant-pendant': {
+        ref: 'REF. CP-2026',
+        name: 'Sextant Coordinates',
+        nameCn: '北斗坐标吊坠',
+        image: 'imgs/ASTRAEUS星座六分仪砖石吊坠.png',
+        specs: [
+            { label: 'METAL', value: '18K White Gold' },
+            { label: 'STONES', value: 'Diamond, Blue Sapphire' },
+            { label: 'WEIGHT', value: '8.6g' },
+            { label: 'CHAIN', value: 'Cable 50cm' },
+            { label: 'MOTIF', value: 'Sextant & Polaris' },
+            { label: 'EDITION', value: 'Limited 36' }
+        ],
+        deterministic: [
+            { value: '51.47°', unit: '北极星方位' },
+            { value: '99.4', unit: '% 角度精度' },
+            { value: '0.006', unit: 'mm 加工公差' }
+        ]
+    },
+    'cipher-ring-1': {
+        ref: 'REF. CR-2026-A',
+        name: 'Binary Inscription',
+        nameCn: '二进制铭刻',
+        image: 'imgs/ASTRAEUS现代简约戒指2.png',
+        specs: [
+            { label: 'METAL', value: '18K Yellow Gold' },
+            { label: 'ACCENT', value: 'Black Diamond' },
+            { label: 'WEIGHT', value: '9.2g' },
+            { label: 'BAND WIDTH', value: '4mm' },
+            { label: 'INSCRIPTION', value: 'Binary Code' },
+            { label: 'EDITION', value: 'Made to Order' }
+        ],
+        deterministic: [
+            { value: '256', unit: 'bit 刻字容量' },
+            { value: '99.6', unit: '% 对称精度' },
+            { value: '0.004', unit: 'mm 加工公差' }
+        ]
+    },
+    'cipher-ring-2': {
+        ref: 'REF. CR-2026-B',
+        name: 'Geometric Cipher',
+        nameCn: '几何密码',
+        image: 'imgs/ASTRAEUS现代简约戒指3.png',
+        specs: [
+            { label: 'METAL', value: '18K Rose Gold' },
+            { label: 'PATTERN', value: 'Tessellation' },
+            { label: 'WEIGHT', value: '7.8g' },
+            { label: 'BAND WIDTH', value: '6mm' },
+            { label: 'TECHNIQUE', value: 'CNC Precision' },
+            { label: 'EDITION', value: 'Limited 72' }
+        ],
+        deterministic: [
+            { value: '60°', unit: '六边形角度' },
+            { value: '99.9', unit: '% 镶嵌精度' },
+            { value: '0.003', unit: 'mm 加工公差' }
+        ]
+    },
+    'cipher-necklace': {
+        ref: 'REF. CN-2026',
+        name: 'Axis Code',
+        nameCn: '轴线代码',
+        image: 'imgs/ASTRAEUS现代简约项链4.png',
+        specs: [
+            { label: 'METAL', value: '18K White Gold' },
+            { label: 'ACCENT', value: 'Diamond Pavé' },
+            { label: 'WEIGHT', value: '6.4g' },
+            { label: 'CHAIN', value: 'Snake 45cm' },
+            { label: 'MOTIF', value: 'Coordinate Grid' },
+            { label: 'EDITION', value: 'Limited 48' }
+        ],
+        deterministic: [
+            { value: '0°/90°', unit: '坐标轴角度' },
+            { value: '99.7', unit: '% 对称精度' },
+            { value: '0.005', unit: 'mm 加工公差' }
+        ]
+    },
+    'celestial-sphere': {
+        ref: 'REF. SP-2026',
+        name: 'Celestial Origin',
+        nameCn: '天球原点',
+        image: 'imgs/1773755290030.png',
+        specs: [
+            { label: 'METAL', value: '22K Yellow Gold' },
+            { label: 'STONES', value: 'South Sea Pearl' },
+            { label: 'WEIGHT', value: '18.2g' },
+            { label: 'SPHERE', value: 'Rotating 12mm' },
+            { label: 'MOTIF', value: 'Armillary Sphere' },
+            { label: 'EDITION', value: 'Limited 24' }
+        ],
+        deterministic: [
+            { value: '360°', unit: '旋转自由度' },
+            { value: '23.5°', unit: '黄道倾角' },
+            { value: '0.008', unit: 'mm 加工公差' }
+        ]
+    },
+    'balance-pendant': {
+        ref: 'REF. BP-2026',
+        name: 'Geometric Equilibrium',
+        nameCn: '几何平衡',
+        image: 'imgs/ASTRAEUS现代简约项链3.png',
+        specs: [
+            { label: 'METAL', value: '18K Yellow Gold' },
+            { label: 'SHAPE', value: 'Asymmetric Balance' },
+            { label: 'WEIGHT', value: '5.6g' },
+            { label: 'CHAIN', value: 'Box 42cm' },
+            { label: 'TECHNIQUE', value: 'Cold Forging' },
+            { label: 'EDITION', value: 'Made to Order' }
+        ],
+        deterministic: [
+            { value: '1:1.618', unit: '黄金分割' },
+            { value: '99.5', unit: '% 平衡精度' },
+            { value: '0.007', unit: 'mm 加工公差' }
+        ]
+    },
+    'architectural-cuff': {
+        ref: 'REF. AC-2026',
+        name: 'Architectural Cuff',
+        nameCn: '建筑腕饰',
+        image: 'imgs/雕塑感手镯2.png',
+        specs: [
+            { label: 'METAL', value: '18K Yellow Gold' },
+            { label: 'STYLE', value: 'Brutalist' },
+            { label: 'WEIGHT', value: '68.4g' },
+            { label: 'WIDTH', value: '35mm' },
+            { label: 'TECHNIQUE', value: 'CNC + Hand Finish' },
+            { label: 'EDITION', value: 'Limited 12' }
+        ],
+        deterministic: [
+            { value: '90°', unit: '建筑角度' },
+            { value: '99.8', unit: '% 几何精度' },
+            { value: '0.01', unit: 'mm 加工公差' }
+        ]
     }
 };
 

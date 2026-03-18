@@ -753,13 +753,76 @@ img {
     letter-spacing: 0.1em;
 }
 
-.series-desc {
+/* ===================
+   Category Filter Buttons
+   类别筛选 · 黑底白字选中效果
+   =================== */
+.category-filter {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: var(--space-xl);
+    padding: 0 var(--gutter);
+}
+
+.filter-btn {
+    /* 绝对直角矩形 */
+    border-radius: 0 !important;
+
+    /* 基础样式 */
+    background: transparent;
+    border: 0.5px solid var(--line-medium);
     font-family: var(--font-serif-cn);
-    font-size: 0.85rem;
-    font-weight: 300;
-    color: var(--text-light);
-    margin-bottom: var(--space-lg);
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 14px 40px;
+    min-width: 120px;
+
+    /* 瞬间过渡 */
+    transition: all 0.1s ease-out;
+}
+
+/* 选中状态：黑底白字 */
+.filter-btn.active {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #1a1a1a;
+    font-weight: 500;
+}
+
+/* 悬停状态 */
+.filter-btn:hover:not(.active) {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    background: rgba(26, 26, 26, 0.03);
+}
+
+/* 合并边框 - 相邻按钮 */
+.filter-btn:not(:first-child) {
+    margin-left: -0.5px;
+}
+
+/* 产品卡片隐藏动画 */
+.product-card.hidden {
+    display: none;
+}
+
+.product-card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .products-grid {
