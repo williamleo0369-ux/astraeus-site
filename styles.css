@@ -211,15 +211,24 @@ img {
     max-width: 600px;
 }
 
+.hero-philosophy-block {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-md);
+}
+
 .hero-philosophy {
-    font-family: var(--font-serif-en);
-    font-size: 0.85rem;
+    font-family: var(--font-serif-cn), var(--font-serif-en);
+    font-size: clamp(1rem, 2vw, 1.5rem);  /* 约为大标题的40% */
     font-weight: 300;
-    font-style: italic;
-    letter-spacing: 0.08em;
-    color: var(--text-secondary);
-    margin-top: var(--space-md);
-    opacity: 0.8;
+    font-style: normal;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    line-height: 1.8;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .hero-location {
@@ -317,11 +326,11 @@ img {
     position: relative;
     z-index: 1;
     text-align: center;
-    margin-top: var(--space-lg);
+    margin-top: var(--space-md);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
 .quote-motto {
