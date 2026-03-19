@@ -216,7 +216,7 @@ img {
     z-index: 1;
     text-align: center;
     margin-top: var(--space-lg);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-xl);
 }
 
 .hero-philosophy {
