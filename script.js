@@ -308,6 +308,25 @@ const productData = {
             { value: '99.8', unit: '% 配对精度' },
             { value: '0.005', unit: 'mm 加工公差' }
         ]
+    },
+    'inscription-ring': {
+        ref: 'REF. IR-1919',
+        name: 'Inner Inscription',
+        nameCn: '内壁铭刻戒指',
+        image: 'imgs/内壁铭刻戒指.png',
+        specs: [
+            { label: 'METAL', value: '18K Gold' },
+            { label: 'CENTER STONE', value: '2ct / Excellent Round Brilliant Cut Diamond' },
+            { label: 'INSCRIPTION', value: 'ASTRAEUS & CO. 18K / 0.004mm' },
+            { label: 'DESIGN', value: '1919 Floating Tension Structure' },
+            { label: 'TECHNIQUE', value: 'Aerospace-Grade Micro Cold Forging' },
+            { label: 'EDITION', value: 'Limited Collection' }
+        ],
+        deterministic: [
+            { value: '0.004', unit: 'mm 铭刻精度' },
+            { value: '99.9', unit: '% 张力稳定性' },
+            { value: '1919', unit: '悬浮结构代码' }
+        ]
     }
 };
 
