@@ -252,6 +252,63 @@ const productData = {
             { value: '99.8', unit: '% 几何精度' },
             { value: '0.01', unit: 'mm 加工公差' }
         ]
+    },
+    'anchor-ring': {
+        ref: 'REF. AR-2026',
+        name: 'Absolute Anchor',
+        nameCn: '绝对锚点戒指',
+        image: 'imgs/绝对锚点戒指.png',
+        specs: [
+            { label: 'METAL', value: '18K White Gold' },
+            { label: 'CENTER STONE', value: 'Lab Diamond 0.5ct' },
+            { label: 'WEIGHT', value: '8.6g' },
+            { label: 'SETTING', value: 'Tension Mount' },
+            { label: 'TECHNIQUE', value: 'Precision CNC' },
+            { label: 'EDITION', value: 'Made to Order' }
+        ],
+        deterministic: [
+            { value: '0.001', unit: 'mm 张力公差' },
+            { value: '99.9', unit: '% 中心对称' },
+            { value: '58', unit: '面切割' }
+        ]
+    },
+    'bezel-ring': {
+        ref: 'REF. BR-2026',
+        name: 'Orbital Bezel',
+        nameCn: '轨道包镶戒指',
+        image: 'imgs/包镶戒指2.png',
+        specs: [
+            { label: 'METAL', value: '18K Yellow Gold' },
+            { label: 'STONES', value: 'Sapphire Cabochon' },
+            { label: 'WEIGHT', value: '12.4g' },
+            { label: 'SETTING', value: 'Full Bezel' },
+            { label: 'FINISH', value: 'Satin Interior' },
+            { label: 'EDITION', value: 'Limited 36' }
+        ],
+        deterministic: [
+            { value: '360°', unit: '包镶角度' },
+            { value: '0.02', unit: 'mm 镶嵌间隙' },
+            { value: '99.6', unit: '% 圆度精度' }
+        ]
+    },
+    'bezel-stud': {
+        ref: 'REF. BE-2026',
+        name: 'Orbital Stud',
+        nameCn: '轨道包镶耳钉',
+        image: 'imgs/包镶耳钉1.png',
+        specs: [
+            { label: 'METAL', value: '18K Yellow Gold' },
+            { label: 'STONES', value: 'Diamond 0.3ct each' },
+            { label: 'WEIGHT', value: '3.2g (pair)' },
+            { label: 'SETTING', value: 'Orbital Bezel' },
+            { label: 'BACK', value: 'Screw Post' },
+            { label: 'EDITION', value: 'Made to Order' }
+        ],
+        deterministic: [
+            { value: '8mm', unit: '直径' },
+            { value: '99.8', unit: '% 配对精度' },
+            { value: '0.005', unit: 'mm 加工公差' }
+        ]
     }
 };
 
