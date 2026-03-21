@@ -127,7 +127,7 @@ const productData = {
         image: 'imgs/ASTRAEUS星座六分仪砖石吊坠.png',
         specs: [
             { label: 'METAL', value: '18K White Gold' },
-            { label: 'STONES', value: 'Diamond, Blue Sapphire' },
+            { label: 'STONES', value: 'Diamond' },
             { label: 'WEIGHT', value: '8.6g' },
             { label: 'CHAIN', value: 'Cable 50cm' },
             { label: 'MOTIF', value: 'Sextant & Polaris' },
@@ -146,7 +146,7 @@ const productData = {
         image: 'imgs/ASTRAEUS现代简约戒指2.png',
         specs: [
             { label: 'METAL', value: '18K Yellow Gold' },
-            { label: 'ACCENT', value: 'Black Diamond' },
+            { label: 'ACCENT', value: 'Diamond' },
             { label: 'WEIGHT', value: '9.2g' },
             { label: 'BAND WIDTH', value: '4mm' },
             { label: 'INSCRIPTION', value: 'Binary Code' },
@@ -203,7 +203,6 @@ const productData = {
         image: 'imgs/1773755290030.png',
         specs: [
             { label: 'METAL', value: '22K Yellow Gold' },
-            { label: 'STONES', value: 'South Sea Pearl' },
             { label: 'WEIGHT', value: '18.2g' },
             { label: 'SPHERE', value: 'Rotating 12mm' },
             { label: 'MOTIF', value: 'Armillary Sphere' },
@@ -260,7 +259,7 @@ const productData = {
         image: 'imgs/绝对锚点戒指.png',
         specs: [
             { label: 'METAL', value: '18K White Gold' },
-            { label: 'CENTER STONE', value: 'Lab Diamond 0.5ct' },
+            { label: 'CENTER STONE', value: 'Diamond 5ct' },
             { label: 'WEIGHT', value: '8.6g' },
             { label: 'SETTING', value: 'Tension Mount' },
             { label: 'TECHNIQUE', value: 'Precision CNC' },
@@ -279,7 +278,7 @@ const productData = {
         image: 'imgs/包镶戒指2.png',
         specs: [
             { label: 'METAL', value: '18K Yellow Gold' },
-            { label: 'STONES', value: 'Sapphire Cabochon' },
+            { label: 'STONES', value: 'Natural Diamond Setting' },
             { label: 'WEIGHT', value: '12.4g' },
             { label: 'SETTING', value: 'Full Bezel' },
             { label: 'FINISH', value: 'Satin Interior' },
