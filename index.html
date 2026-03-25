@@ -49,6 +49,42 @@
 
     <!-- Vercel Web Analytics -->
     <script defer src="/_vercel/insights/script.js"></script>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ASTRAEUS & CO.",
+        "alternateName": "Astraeus and Company",
+        "url": "https://theastraeus.com",
+        "logo": "https://theastraeus.com/imgs/logo.png",
+        "description": "Luxury goldsmiths and jewellers since 1789. Exquisite handcrafted jewelry combining celestial artistry with Austrian craftsmanship.",
+        "foundingDate": "1789",
+        "foundingLocation": "Graz, Austria",
+        "sameAs": [],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": ["English", "Chinese"]
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "JewelryStore",
+        "name": "ASTRAEUS & CO.",
+        "image": "https://theastraeus.com/imgs/og-image.jpg",
+        "priceRange": "$$$$$",
+        "servesCuisine": "Luxury Jewelry",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "London",
+            "addressCountry": "UK"
+        }
+    }
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -200,7 +236,7 @@
             <!-- ═══ 戒指 RINGS ═══ -->
             <article class="product-card" data-category="ring" onclick="openProductModal('celestial-ring')">
                 <div class="product-image-wrap">
-                    <img src="imgs/古法戒指.png" alt="Celestial Armillary Ring" class="product-image">
+                    <img src="imgs/古法戒指.png" alt="Celestial Armillary Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. AR-1778</span>
@@ -210,7 +246,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('compass-ring')">
                 <div class="product-image-wrap">
-                    <img src="imgs/定制戒指.png" alt="Navigator's Signet" class="product-image">
+                    <img src="imgs/定制戒指.png" alt="Navigator's Signet" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CR-2024</span>
@@ -220,7 +256,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('cipher-ring-1')">
                 <div class="product-image-wrap">
-                    <img src="imgs/ASTRAEUS现代简约戒指2.png" alt="Binary Inscription Ring" class="product-image">
+                    <img src="imgs/ASTRAEUS现代简约戒指2.png" alt="Binary Inscription Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CR-2026-A</span>
@@ -230,7 +266,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('cipher-ring-2')">
                 <div class="product-image-wrap">
-                    <img src="imgs/ASTRAEUS现代简约戒指3.png" alt="Geometric Cipher Ring" class="product-image">
+                    <img src="imgs/ASTRAEUS现代简约戒指3.png" alt="Geometric Cipher Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CR-2026-B</span>
@@ -240,7 +276,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('anchor-ring')">
                 <div class="product-image-wrap">
-                    <img src="imgs/绝对锚点戒指.png" alt="Absolute Anchor Ring" class="product-image">
+                    <img src="imgs/绝对锚点戒指.png" alt="Absolute Anchor Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. AR-2026</span>
@@ -250,7 +286,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('bezel-ring')">
                 <div class="product-image-wrap">
-                    <img src="imgs/包镶戒指2.png" alt="Bezel Setting Ring" class="product-image">
+                    <img src="imgs/包镶戒指2.png" alt="Bezel Setting Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. BR-2026</span>
@@ -260,7 +296,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('inscription-ring')">
                 <div class="product-image-wrap">
-                    <img src="imgs/内壁铭刻戒指.png" alt="Inner Inscription Ring" class="product-image">
+                    <img src="imgs/内壁铭刻戒指.png" alt="Inner Inscription Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. IR-1919</span>
@@ -272,7 +308,7 @@
             <!-- ═══ 项链 NECKLACES ═══ -->
             <article class="product-card" data-category="necklace" onclick="openProductModal('sextant-pendant')">
                 <div class="product-image-wrap">
-                    <img src="imgs/ASTRAEUS星座六分仪砖石吊坠.png" alt="Sextant Diamond Pendant" class="product-image">
+                    <img src="imgs/ASTRAEUS星座六分仪砖石吊坠.png" alt="Sextant Diamond Pendant" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CP-2026</span>
@@ -282,7 +318,7 @@
             </article>
             <article class="product-card" data-category="necklace" onclick="openProductModal('cipher-necklace')">
                 <div class="product-image-wrap">
-                    <img src="imgs/axis-code-necklace.jpeg" alt="Axis Code Pendant" class="product-image">
+                    <img src="imgs/axis-code-necklace.jpeg" alt="Axis Code Pendant" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CN-2026</span>
@@ -292,7 +328,7 @@
             </article>
             <article class="product-card" data-category="ring" onclick="openProductModal('celestial-sphere')">
                 <div class="product-image-wrap">
-                    <img src="imgs/1773755290030.png" alt="Celestial Origin Ring" class="product-image">
+                    <img src="imgs/1773755290030.png" alt="Celestial Origin Ring" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. SP-2026</span>
@@ -302,7 +338,7 @@
             </article>
             <article class="product-card" data-category="necklace" onclick="openProductModal('balance-pendant')">
                 <div class="product-image-wrap">
-                    <img src="imgs/geometric-equilibrium.jpeg" alt="Geometric Balance Pendant" class="product-image">
+                    <img src="imgs/geometric-equilibrium.jpeg" alt="Geometric Balance Pendant" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. BP-2026</span>
@@ -312,7 +348,7 @@
             </article>
             <article class="product-card" data-category="necklace" onclick="openProductModal('stellar-pendant')">
                 <div class="product-image-wrap">
-                    <img src="imgs/星芒项链.png" alt="Aurora Hexagon" class="product-image">
+                    <img src="imgs/星芒项链.png" alt="Aurora Hexagon" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. SP-1919</span>
@@ -322,7 +358,7 @@
             </article>
             <article class="product-card" data-category="necklace" onclick="openProductModal('orrery-necklace')">
                 <div class="product-image-wrap">
-                    <img src="imgs/中世纪复古项链.png.webp" alt="Orrery Grand Collier" class="product-image">
+                    <img src="imgs/中世纪复古项链.png.webp" alt="Orrery Grand Collier" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. ON-1768</span>
@@ -334,7 +370,7 @@
             <!-- ═══ 手镯 BRACELETS ═══ -->
             <article class="product-card" data-category="bracelet" onclick="openProductModal('astrolabe-bracelet')">
                 <div class="product-image-wrap">
-                    <img src="imgs/古法手环.png" alt="Horological Cuff" class="product-image">
+                    <img src="imgs/古法手环.png" alt="Horological Cuff" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. AB-1762</span>
@@ -344,7 +380,7 @@
             </article>
             <article class="product-card" data-category="bracelet" onclick="openProductModal('architectural-cuff')">
                 <div class="product-image-wrap">
-                    <img src="imgs/雕塑感手镯2.png" alt="Architectural Cuff" class="product-image">
+                    <img src="imgs/雕塑感手镯2.png" alt="Architectural Cuff" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. AC-2026</span>
@@ -356,7 +392,7 @@
             <!-- ═══ 胸针 BROOCHES ═══ -->
             <article class="product-card" data-category="brooch" onclick="openProductModal('celestial-brooch')">
                 <div class="product-image-wrap">
-                    <img src="imgs/胸针.png..webp" alt="Celestial Globe Brooch" class="product-image">
+                    <img src="imgs/胸针.png..webp" alt="Celestial Globe Brooch" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. CB-1764</span>
@@ -368,7 +404,7 @@
             <!-- ═══ 耳钉 EARRINGS ═══ -->
             <article class="product-card" data-category="earring" onclick="openProductModal('bezel-stud')">
                 <div class="product-image-wrap">
-                    <img src="imgs/包镶耳钉1.png" alt="Bezel Setting Stud Earrings" class="product-image">
+                    <img src="imgs/包镶耳钉1.png" alt="Bezel Setting Stud Earrings" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="product-ref">REF. BE-2026</span>
