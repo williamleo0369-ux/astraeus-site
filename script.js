@@ -1221,7 +1221,7 @@ async function loadAdminOrders(token) {
                 <div class="admin-row"><span>Tracking</span><strong>${escapeHtml(order.carrier_slug || '-')} ${escapeHtml(order.tracking_number || '')}</strong></div>
                 <div class="admin-update">
                     <select data-field="status" data-order="${escapeHtml(order.id)}">
-                        ${renderSelectOptions(['checkout_created', 'paid', 'processing', 'fulfilled', 'cancelled', 'refunded'], order.status)}
+                        ${renderSelectOptions(['checkout_created', 'checkout_failed', 'paid', 'processing', 'fulfilled', 'cancelled', 'refunded'], order.status)}
                     </select>
                     <select data-field="paymentStatus" data-order="${escapeHtml(order.id)}">
                         ${renderSelectOptions(['unpaid', 'paid', 'refunded', 'failed'], order.payment_status)}

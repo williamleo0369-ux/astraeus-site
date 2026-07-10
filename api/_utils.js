@@ -10,6 +10,12 @@ export async function readJson(req) {
 }
 
 export async function readRawBody(req) {
+  if (Buffer.isBuffer(req.body)) return req.body;
+  if (typeof req.body === 'string') return Buffer.from(req.body);
+  if (req.body && typeof req.body === 'object') {
+    throw new Error('Raw request body is unavailable');
+  }
+
   const chunks = [];
   for await (const chunk of req) {
     chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));

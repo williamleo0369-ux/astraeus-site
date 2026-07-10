@@ -1,20 +1,12 @@
-import crypto from 'node:crypto';
 import { markStripeCheckoutCompleted } from '../../lib/db.js';
+import { verifyStripeSignature } from '../../lib/stripe-signature.js';
 import { readRawBody, sendJson } from '../_utils.js';
 
-function verifyStripeSignature(rawBody, signatureHeader, secret) {
-  if (!signatureHeader || !secret) return false;
-  const fields = Object.fromEntries(signatureHeader.split(',').map((part) => part.split('=')));
-  const timestamp = fields.t;
-  const signature = fields.v1;
-  if (!timestamp || !signature) return false;
-
-  const payload = `${timestamp}.${rawBody.toString('utf8')}`;
-  const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
-  const a = Buffer.from(expected, 'hex');
-  const b = Buffer.from(signature, 'hex');
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
-}
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -30,7 +22,7 @@ export default async function handler(req, res) {
 
     const event = JSON.parse(rawBody.toString('utf8'));
     if (event.type === 'checkout.session.completed') {
-      await markStripeCheckoutCompleted(event.data.object);
+      await markStripeCheckoutCompleted(event.data.object, event.id);
     }
 
     return sendJson(res, 200, { received: true });

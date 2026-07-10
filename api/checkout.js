@@ -1,11 +1,13 @@
 import { getOrderTotals, getSellableLineItems } from '../lib/catalog.js';
-import { createOrder, setStripeSession } from '../lib/db.js';
+import { createOrder, markCheckoutFailed, setStripeSession } from '../lib/db.js';
 import { getSiteUrl, readJson, sendJson } from './_utils.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return sendJson(res, 405, { error: 'Method not allowed' });
   }
+
+  let order = null;
 
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -19,7 +21,7 @@ export default async function handler(req, res) {
     }
 
     const totals = getOrderTotals(lineItems);
-    const order = await createOrder({
+    order = await createOrder({
       lineItems,
       totals,
       customer: body.customer || {},
@@ -62,12 +64,20 @@ export default async function handler(req, res) {
 
     const session = await stripeResponse.json();
     if (!stripeResponse.ok) {
+      await markCheckoutFailed(order.id, session.error?.message || 'Stripe Checkout failed');
       return sendJson(res, stripeResponse.status, { error: session.error?.message || 'Stripe Checkout failed', orderId: order.id });
     }
 
     await setStripeSession(order.id, session.id);
     return sendJson(res, 200, { orderId: order.id, url: session.url });
   } catch (error) {
+    if (order) {
+      try {
+        await markCheckoutFailed(order.id, error.message);
+      } catch (recordError) {
+        console.error('Unable to record checkout failure', recordError);
+      }
+    }
     return sendJson(res, 500, { error: error.message || 'Checkout failed' });
   }
 }

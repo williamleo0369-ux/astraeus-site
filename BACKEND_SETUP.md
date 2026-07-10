@@ -40,6 +40,8 @@ checkout.session.completed
 
 Set the webhook signing secret as `STRIPE_WEBHOOK_SECRET`.
 
+The webhook route reads the unmodified request body, rejects signatures older than five minutes, and stores Stripe event IDs so retries do not duplicate the order timeline.
+
 ## Database
 
 The API lazily creates the required tables at runtime. The schema is also available in:

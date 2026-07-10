@@ -25,9 +25,11 @@ create table if not exists order_events (
   type text not null,
   message text not null,
   payload jsonb not null default '{}'::jsonb,
+  external_id text,
   created_at timestamptz not null default now()
 );
 
 create index if not exists orders_created_at_idx on orders (created_at desc);
 create index if not exists orders_tracking_number_idx on orders (tracking_number);
 create index if not exists order_events_order_id_idx on order_events (order_id, created_at desc);
+create unique index if not exists order_events_external_id_idx on order_events (external_id);

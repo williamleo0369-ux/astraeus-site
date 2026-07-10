@@ -1,7 +1,7 @@
 import { updateOrder } from '../../lib/db.js';
 import { readJson, requireAdmin, sendJson } from '../_utils.js';
 
-const allowedStatus = new Set(['checkout_created', 'paid', 'processing', 'fulfilled', 'cancelled', 'refunded']);
+const allowedStatus = new Set(['checkout_created', 'checkout_failed', 'paid', 'processing', 'fulfilled', 'cancelled', 'refunded']);
 const allowedPaymentStatus = new Set(['unpaid', 'paid', 'refunded', 'failed']);
 const allowedFulfillmentStatus = new Set(['pending', 'preparing', 'dispatched', 'in_transit', 'delivered', 'exception']);
 
