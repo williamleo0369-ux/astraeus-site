@@ -34,7 +34,8 @@ export default async function handler(req, res) {
 
   try {
     const limit = req.query?.limit || 200;
-    const inquiries = await listInquiries(limit);
+    const includeArchived = req.query?.includeArchived === '1' || req.query?.includeArchived === 'true';
+    const inquiries = await listInquiries(limit, { includeArchived });
     if (req.query?.format === 'csv') {
       sendCsv(res, inquiries);
       return;

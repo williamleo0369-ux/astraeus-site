@@ -2352,6 +2352,28 @@ img {
     cursor: pointer;
 }
 
+.admin-inquiry-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+}
+
+.admin-inquiry-actions button {
+    border: 0.5px solid var(--line-medium);
+    background: transparent;
+    padding: var(--space-xs) var(--space-sm);
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+}
+
+.admin-inquiry-actions button.danger {
+    color: #9A5C48;
+    border-color: rgba(154, 92, 72, 0.45);
+}
+
 .order-timeline {
     margin-top: var(--space-md);
     border-top: 0.5px solid var(--line-subtle);

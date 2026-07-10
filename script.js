@@ -1284,6 +1284,10 @@ async function loadAdminInquiries(token) {
                 <div class="admin-row"><span>Selected Piece</span><strong>${escapeHtml(inquiry.selected_piece || '-')}</strong></div>
                 <div class="admin-row"><span>Cart</span><strong>${escapeHtml(inquiry.cart_summary || '-')}</strong></div>
                 <p class="cart-note">${escapeHtml(inquiry.inquiry || 'No message provided.')}</p>
+                <div class="admin-inquiry-actions">
+                    <button type="button" onclick="updateAdminInquiry('${escapeAttribute(inquiry.id)}', 'archive')">归档</button>
+                    <button class="danger" type="button" onclick="updateAdminInquiry('${escapeAttribute(inquiry.id)}', 'delete')">删除</button>
+                </div>
             </article>
         `).join('');
         sessionStorage.setItem('astraeus-admin-token', token);
@@ -1319,6 +1323,29 @@ async function exportAdminInquiries(token) {
     } catch (error) {
         alert(error.message || 'Export failed');
     }
+}
+
+async function updateAdminInquiry(inquiryId, action) {
+    const token = sessionStorage.getItem('astraeus-admin-token') || document.getElementById('adminToken')?.value || '';
+    const actionLabel = action === 'delete' ? '删除' : '归档';
+    if (action === 'delete' && !confirm('确定要永久删除这条询盘吗？此操作无法撤销。')) {
+        return;
+    }
+
+    const response = await fetch('/api/admin/update-inquiry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-admin-token': token
+        },
+        body: JSON.stringify({ inquiryId, action })
+    });
+    const data = await readApiJson(response);
+    if (!response.ok) {
+        alert(data.error || `${actionLabel}失败`);
+        return;
+    }
+    await loadAdminInquiries(token);
 }
 
 async function updateAdminOrder(orderId) {
