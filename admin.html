@@ -14,7 +14,7 @@
     <main class="admin-shell" id="adminApp">
         <div class="admin-header">
             <span class="service-kicker">ASTRAEUS OPERATIONS</span>
-            <h1 class="detail-title">Order Admin</h1>
+            <h1 class="detail-title">Operations Admin</h1>
             <p class="cart-note">Use the private admin token from Vercel env vars. Do not share this page publicly.</p>
         </div>
 
@@ -22,6 +22,8 @@
             <input id="adminToken" class="tracking-input" type="password" placeholder="ADMIN_API_TOKEN">
             <button id="checkConfigButton" class="tracking-submit" type="button">CHECK SETUP</button>
             <button id="loadOrdersButton" class="tracking-submit" type="button">LOAD ORDERS</button>
+            <button id="loadInquiriesButton" class="tracking-submit" type="button">LOAD INQUIRIES</button>
+            <button id="exportInquiriesButton" class="tracking-submit" type="button">EXPORT CSV</button>
         </div>
 
         <section id="adminConfig" class="admin-config">
@@ -30,6 +32,10 @@
 
         <section id="adminOrders" class="admin-orders">
             <p class="admin-empty">Enter admin token to load orders.</p>
+        </section>
+
+        <section id="adminInquiries" class="admin-orders">
+            <p class="admin-empty">Load inquiries to view private form submissions.</p>
         </section>
     </main>
 

@@ -545,14 +545,21 @@ function initFormSubmission() {
         submitBtn.innerHTML = '<span>SENDING · 发送中</span>';
 
         try {
+            const payload = Object.fromEntries(formData.entries());
+            payload.source_path = window.location.pathname + window.location.hash;
+
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: formData,
-                headers: { Accept: 'application/json' }
+                body: JSON.stringify(payload),
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
             });
 
+            const data = await readApiJson(response);
             if (!response.ok) {
-                throw new Error('Inquiry submission failed');
+                throw new Error(data.error || 'Inquiry submission failed');
             }
 
             submitBtn.innerHTML = '<span>INQUIRY SUBMITTED · 已提交</span>';
@@ -1140,12 +1147,20 @@ function initAdminPage() {
 
     const tokenInput = document.getElementById('adminToken');
     const loadButton = document.getElementById('loadOrdersButton');
+    const loadInquiriesButton = document.getElementById('loadInquiriesButton');
+    const exportInquiriesButton = document.getElementById('exportInquiriesButton');
     const configButton = document.getElementById('checkConfigButton');
     const savedToken = sessionStorage.getItem('astraeus-admin-token');
     if (tokenInput && savedToken) tokenInput.value = savedToken;
 
     if (loadButton) {
         loadButton.addEventListener('click', () => loadAdminOrders(tokenInput?.value || ''));
+    }
+    if (loadInquiriesButton) {
+        loadInquiriesButton.addEventListener('click', () => loadAdminInquiries(tokenInput?.value || ''));
+    }
+    if (exportInquiriesButton) {
+        exportInquiriesButton.addEventListener('click', () => exportAdminInquiries(tokenInput?.value || ''));
     }
     if (configButton) {
         configButton.addEventListener('click', () => loadAdminConfig(tokenInput?.value || ''));
@@ -1238,6 +1253,71 @@ async function loadAdminOrders(token) {
         sessionStorage.setItem('astraeus-admin-token', token);
     } catch (error) {
         adminOutput.innerHTML = `<p class="admin-empty">${escapeHtml(error.message)}</p>`;
+    }
+}
+
+async function loadAdminInquiries(token) {
+    const adminOutput = document.getElementById('adminInquiries');
+    if (!adminOutput) return;
+    adminOutput.innerHTML = '<p class="admin-empty">Loading inquiries...</p>';
+
+    try {
+        const response = await fetch('/api/admin/inquiries?limit=200', {
+            headers: { 'x-admin-token': token }
+        });
+        const data = await readApiJson(response);
+        if (!response.ok) throw new Error(data.error || 'Unable to load inquiries');
+
+        if (!data.inquiries.length) {
+            adminOutput.innerHTML = '<p class="admin-empty">No inquiries yet.</p>';
+            return;
+        }
+
+        adminOutput.innerHTML = data.inquiries.map((inquiry) => `
+            <article class="admin-order">
+                <div class="admin-order-head">
+                    <strong>${escapeHtml(inquiry.name || 'Private inquiry')}</strong>
+                    <span>${escapeHtml(formatTimelineDate(inquiry.created_at))} · ${escapeHtml(inquiry.status || 'new')}</span>
+                </div>
+                <div class="admin-row"><span>Email</span><strong>${escapeHtml(inquiry.email || '-')}</strong></div>
+                <div class="admin-row"><span>Phone</span><strong>${escapeHtml(inquiry.phone || '-')}</strong></div>
+                <div class="admin-row"><span>Selected Piece</span><strong>${escapeHtml(inquiry.selected_piece || '-')}</strong></div>
+                <div class="admin-row"><span>Cart</span><strong>${escapeHtml(inquiry.cart_summary || '-')}</strong></div>
+                <p class="cart-note">${escapeHtml(inquiry.inquiry || 'No message provided.')}</p>
+            </article>
+        `).join('');
+        sessionStorage.setItem('astraeus-admin-token', token);
+    } catch (error) {
+        adminOutput.innerHTML = `<p class="admin-empty">${escapeHtml(error.message)}</p>`;
+    }
+}
+
+async function exportAdminInquiries(token) {
+    if (!token) {
+        alert('Enter ADMIN_API_TOKEN first');
+        return;
+    }
+    try {
+        const response = await fetch('/api/admin/inquiries?format=csv&limit=500', {
+            headers: { 'x-admin-token': token }
+        });
+        if (!response.ok) {
+            const data = await readApiJson(response);
+            throw new Error(data.error || 'Export failed');
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'astraeus-inquiries.csv';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        sessionStorage.setItem('astraeus-admin-token', token);
+    } catch (error) {
+        alert(error.message || 'Export failed');
     }
 }
 

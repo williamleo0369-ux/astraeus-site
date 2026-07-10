@@ -487,8 +487,7 @@
             </p>
         </div>
 
-        <!-- Formspree Form -->
-        <form class="inquiry-form" id="inquiryForm" action="https://formspree.io/f/xojkdgry" method="POST">
+        <form class="inquiry-form" id="inquiryForm" action="/api/inquiries" method="POST">
             <div class="form-frame">
                 <div class="form-group">
                     <label class="form-label" data-en="NAME" data-cn="姓名 · NAME">姓名 · NAME</label>
@@ -511,6 +510,7 @@
                 <input type="hidden" name="_language" id="formLanguage" value="cn">
                 <input type="hidden" name="selected_piece" id="selectedPiece" value="">
                 <input type="hidden" name="cart_summary" id="cartSummary" value="">
+                <input type="text" name="website" value="" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;height:1px;width:1px;opacity:0;">
             </div>
             <button type="submit" class="form-submit">
                 <span data-en="SUBMIT INQUIRY" data-cn="SUBMIT INQUIRY · 提交询盘">SUBMIT INQUIRY · 提交询盘</span>
