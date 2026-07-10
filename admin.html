@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRAEUS & CO. | Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+SC:wght@200;300;400;500&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="product-page">
+    <main class="admin-shell" id="adminApp">
+        <div class="admin-header">
+            <span class="service-kicker">ASTRAEUS OPERATIONS</span>
+            <h1 class="detail-title">Order Admin</h1>
+            <p class="cart-note">Use the private admin token from Vercel env vars. Do not share this page publicly.</p>
+        </div>
+
+        <div class="admin-controls">
+            <input id="adminToken" class="tracking-input" type="password" placeholder="ADMIN_API_TOKEN">
+            <button id="loadOrdersButton" class="tracking-submit" type="button">LOAD ORDERS</button>
+        </div>
+
+        <section id="adminOrders" class="admin-orders">
+            <p class="admin-empty">Enter admin token to load orders.</p>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

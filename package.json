@@ -1,0 +1,15 @@
+{
+  "name": "astraeus-site",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "check": "node --check script.js && node --check lib/catalog.js && node --check lib/db.js && node --check api/_utils.js && node --check api/checkout.js && node --check api/tracking.js && node --check api/webhooks/stripe.js && node --check api/admin/orders.js && node --check api/admin/update-order.js && node --check scripts/print-schema.js",
+    "db:schema": "node scripts/print-schema.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2"
+  },
+  "devDependencies": {}
+}

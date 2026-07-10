@@ -330,13 +330,50 @@ const productData = {
     }
 };
 
+const commerceCatalog = {
+    'celestial-ring': { price: null, currency: 'USD', stockStatus: 'Archive consultation', sellable: false, leadTime: 'Private appointment', fulfillment: 'Museum-grade handling' },
+    'compass-ring': { price: null, currency: 'USD', stockStatus: 'Bespoke', sellable: false, leadTime: '6-8 weeks', fulfillment: 'Made to order' },
+    'stellar-pendant': { price: 6800, currency: 'USD', stockStatus: 'Limited availability', sellable: true, leadTime: '10-14 days', fulfillment: 'Insured express' },
+    'astrolabe-bracelet': { price: null, currency: 'USD', stockStatus: 'Archive consultation', sellable: false, leadTime: 'Private appointment', fulfillment: 'White-glove logistics' },
+    'celestial-brooch': { price: null, currency: 'USD', stockStatus: 'Unique piece', sellable: false, leadTime: 'Private appointment', fulfillment: 'White-glove logistics' },
+    'orrery-necklace': { price: null, currency: 'USD', stockStatus: 'Unique piece', sellable: false, leadTime: 'Private appointment', fulfillment: 'White-glove logistics' },
+    'sextant-pendant': { price: 12800, currency: 'USD', stockStatus: 'Limited 36', sellable: true, leadTime: '14-21 days', fulfillment: 'Insured express' },
+    'cipher-ring-1': { price: 4200, currency: 'USD', stockStatus: 'Made to order', sellable: true, leadTime: '4-6 weeks', fulfillment: 'Insured express' },
+    'cipher-ring-2': { price: 4800, currency: 'USD', stockStatus: 'Limited 72', sellable: true, leadTime: '3-5 weeks', fulfillment: 'Insured express' },
+    'cipher-necklace': { price: 7600, currency: 'USD', stockStatus: 'Limited 48', sellable: true, leadTime: '3-4 weeks', fulfillment: 'Insured express' },
+    'celestial-sphere': { price: 16800, currency: 'USD', stockStatus: 'Limited 24', sellable: true, leadTime: '6-8 weeks', fulfillment: 'Insured express' },
+    'balance-pendant': { price: 5200, currency: 'USD', stockStatus: 'Made to order', sellable: true, leadTime: '4-6 weeks', fulfillment: 'Insured express' },
+    'architectural-cuff': { price: 19800, currency: 'USD', stockStatus: 'Limited 12', sellable: true, leadTime: '8-10 weeks', fulfillment: 'White-glove logistics' },
+    'anchor-ring': { price: null, currency: 'USD', stockStatus: 'Stone quote required', sellable: false, leadTime: 'Private quotation', fulfillment: 'White-glove logistics' },
+    'bezel-ring': { price: 11800, currency: 'USD', stockStatus: 'Limited 36', sellable: true, leadTime: '5-7 weeks', fulfillment: 'Insured express' },
+    'bezel-stud': { price: 3600, currency: 'USD', stockStatus: 'Made to order', sellable: true, leadTime: '3-4 weeks', fulfillment: 'Insured express' },
+    'inscription-ring': { price: null, currency: 'USD', stockStatus: 'Diamond quote required', sellable: false, leadTime: 'Private quotation', fulfillment: 'White-glove logistics' }
+};
+
+Object.entries(commerceCatalog).forEach(([id, commerce]) => {
+    if (productData[id]) {
+        productData[id] = { ...productData[id], ...commerce };
+    }
+});
+
+const CART_STORAGE_KEY = 'astraeus-cart';
+let currentProductId = null;
+
 // DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
+    initDynamicShowcase();
     initSmoothScroll();
     initFormSubmission();
     initScrollAnimations();
     initLanguageSwitcher();
     initCategoryFilter();
+    initProductCommerceCards();
+    initCart();
+    initTrackingSearch();
+    initProductDetailPage();
+    initOrderPage();
+    initAdminPage();
+    applyPendingInquiry();
     initTrinityNavigation();
     generateHexStream();
 });
@@ -362,12 +399,75 @@ function initSmoothScroll() {
     });
 }
 
+function initDynamicShowcase() {
+    requestAnimationFrame(() => {
+        document.body.classList.add('page-ready');
+    });
+
+    document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const isLocalPage = href.endsWith('.html') || href.includes('.html#') || href.includes('.html?');
+        if (!isLocalPage || link.target) return;
+
+        link.addEventListener('click', event => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            document.body.classList.add('page-leaving');
+            setTimeout(() => {
+                window.location.href = href;
+            }, 180);
+        });
+    });
+
+    initProductTilt();
+}
+
+function initProductTilt() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.classList.add('is-revealing');
+
+        card.addEventListener('mousemove', event => {
+            const rect = card.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            card.style.setProperty('--tilt-x', `${x * 5}deg`);
+            card.style.setProperty('--tilt-y', `${y * -5}deg`);
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--tilt-x', '0deg');
+            card.style.setProperty('--tilt-y', '0deg');
+        });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+}
+
 // Product Modal
+function openProductPage(productId) {
+    document.body.classList.add('page-leaving');
+    setTimeout(() => {
+        window.location.href = `product.html?id=${encodeURIComponent(productId)}`;
+    }, 180);
+}
+
 function openProductModal(productId) {
     const modal = document.getElementById('productModal');
     const product = productData[productId];
 
     if (!product || !modal) return;
+    currentProductId = productId;
 
     // Update modal content
     document.getElementById('modalImage').src = product.image;
@@ -375,6 +475,14 @@ function openProductModal(productId) {
     document.getElementById('modalRef').textContent = product.ref;
     document.getElementById('modalTitle').textContent = product.name;
     document.getElementById('modalTitleCn').textContent = product.nameCn;
+    document.getElementById('modalCommerce').innerHTML = `
+        <div class="commerce-price">${formatProductPrice(product)}</div>
+        <div class="commerce-meta">
+            <span>${product.stockStatus}</span>
+            <span>${product.leadTime}</span>
+            <span>${product.fulfillment}</span>
+        </div>
+    `;
 
     // Specs
     const specsContainer = document.getElementById('modalSpecs');
@@ -393,6 +501,12 @@ function openProductModal(productId) {
             <span class="det-unit">${item.unit}</span>
         </div>
     `).join('');
+
+    const buyButton = document.querySelector('.modal-buy');
+    if (buyButton) {
+        buyButton.disabled = !product.sellable;
+        buyButton.textContent = product.sellable ? 'ADD TO CART · 加入购物车' : 'PRIVATE QUOTATION · 私洽报价';
+    }
 
     // Show modal
     modal.classList.add('active');
@@ -419,26 +533,47 @@ function initFormSubmission() {
     const form = document.getElementById('inquiryForm');
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        syncCartSummaryField();
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        // Show success message
         const submitBtn = form.querySelector('.form-submit');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span>INQUIRY SUBMITTED · 已提交</span>';
-        submitBtn.style.background = '#2C2C2C';
-        submitBtn.style.color = '#FAFAF8';
 
-        // Reset form
-        setTimeout(() => {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>SENDING · 发送中</span>';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { Accept: 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error('Inquiry submission failed');
+            }
+
+            submitBtn.innerHTML = '<span>INQUIRY SUBMITTED · 已提交</span>';
+            submitBtn.style.background = '#2C2C2C';
+            submitBtn.style.color = '#FAFAF8';
             form.reset();
-            submitBtn.innerHTML = originalText;
-            submitBtn.style.background = '';
-            submitBtn.style.color = '';
-        }, 3000);
+
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+                submitBtn.style.color = '';
+                submitBtn.disabled = false;
+            }, 3000);
+        } catch (error) {
+            submitBtn.innerHTML = '<span>SUBMISSION FAILED · 请稍后重试</span>';
+            submitBtn.disabled = false;
+
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+            }, 3000);
+        }
     });
 }
 
@@ -459,7 +594,7 @@ function initScrollAnimations() {
     }, observerOptions);
 
     // Observe sections
-    document.querySelectorAll('.maison, .collection, .heritage, .contact').forEach(section => {
+    document.querySelectorAll('.maison, .collection, .heritage, .contact, .services').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(30px)';
         section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
@@ -515,6 +650,11 @@ function initLanguageSwitcher() {
 }
 
 function applyLanguage(lang) {
+    const formLanguage = document.getElementById('formLanguage');
+    if (formLanguage) {
+        formLanguage.value = lang;
+    }
+
     // Toggle visibility of language-specific elements
     document.querySelectorAll('[data-en]').forEach(el => {
         if (lang === 'en') {
@@ -565,6 +705,530 @@ function initCategoryFilter() {
     });
 }
 
+function initProductCommerceCards() {
+    document.querySelectorAll('.product-card').forEach(card => {
+        const clickHandler = card.getAttribute('onclick') || '';
+        const match = clickHandler.match(/openProduct(?:Modal|Page)\('([^']+)'\)/);
+        if (!match) return;
+
+        const product = productData[match[1]];
+        const info = card.querySelector('.product-info');
+        if (!product || !info || info.querySelector('.product-commerce')) return;
+
+        const commerce = document.createElement('div');
+        commerce.className = 'product-commerce';
+        commerce.innerHTML = `
+            <span>${formatProductPrice(product)}</span>
+            <em>${product.sellable ? 'AVAILABLE' : 'PRIVATE'}</em>
+        `;
+        info.appendChild(commerce);
+    });
+}
+
+function initCart() {
+    updateCartCount();
+    renderCart();
+}
+
+function getCart() {
+    try {
+        return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveCart(cart) {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    updateCartCount(true);
+    renderCart();
+}
+
+function addCurrentProductToCart() {
+    if (!currentProductId) return;
+    addProductToCart(currentProductId);
+}
+
+function addProductToCart(productId) {
+    const product = productData[productId];
+    if (!product) return;
+
+    if (!product.sellable) {
+        requestProductInquiry(productId);
+        return;
+    }
+
+    const cart = getCart();
+    const existing = cart.find(item => item.id === productId);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({ id: productId, quantity: 1 });
+    }
+
+    saveCart(cart);
+    openCartDrawer();
+}
+
+function initProductDetailPage() {
+    const detail = document.getElementById('productDetail');
+    if (!detail) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id') || 'sextant-pendant';
+    const product = productData[productId];
+
+    if (!product) {
+        detail.innerHTML = `
+            <div class="detail-missing">
+                <span>ARCHIVE REFERENCE NOT FOUND</span>
+                <h1>Piece unavailable</h1>
+                <a href="index.html#collection">Return to collection</a>
+            </div>
+        `;
+        return;
+    }
+
+    currentProductId = productId;
+    document.title = `${product.name} | ASTRAEUS & CO.`;
+
+    const image = document.getElementById('detailImage');
+    const ref = document.getElementById('detailRef');
+    const title = document.getElementById('detailTitle');
+    const titleCn = document.getElementById('detailTitleCn');
+    const commerce = document.getElementById('detailCommerce');
+    const specs = document.getElementById('detailSpecs');
+    const deterministic = document.getElementById('detailDeterministic');
+    const buyButton = document.getElementById('detailBuyButton');
+    const inquiryButton = document.getElementById('detailInquiryButton');
+
+    if (image) {
+        image.src = product.image;
+        image.alt = product.name;
+    }
+    if (ref) ref.textContent = product.ref;
+    if (title) title.textContent = product.name;
+    if (titleCn) titleCn.textContent = product.nameCn;
+    if (commerce) {
+        commerce.innerHTML = `
+            <div class="commerce-price">${formatProductPrice(product)}</div>
+            <div class="commerce-meta">
+                <span>${product.stockStatus}</span>
+                <span>${product.leadTime}</span>
+                <span>${product.fulfillment}</span>
+            </div>
+        `;
+    }
+    if (specs) {
+        specs.innerHTML = product.specs.map(spec => `
+            <div class="spec-row">
+                <span class="spec-label">${spec.label}</span>
+                <span class="spec-value">${spec.value}</span>
+            </div>
+        `).join('');
+    }
+    if (deterministic) {
+        deterministic.innerHTML = product.deterministic.map(item => `
+            <div class="det-item">
+                <span class="det-value">${item.value}</span>
+                <span class="det-unit">${item.unit}</span>
+            </div>
+        `).join('');
+    }
+    if (buyButton) {
+        buyButton.disabled = !product.sellable;
+        buyButton.textContent = product.sellable ? 'ADD TO CART · 加入购物车' : 'PRIVATE QUOTATION · 私洽报价';
+        buyButton.onclick = () => addProductToCart(productId);
+    }
+    if (inquiryButton) {
+        inquiryButton.onclick = () => requestProductInquiry(productId);
+    }
+}
+
+function removeCartItem(productId) {
+    saveCart(getCart().filter(item => item.id !== productId));
+}
+
+function updateCartCount(pulse = false) {
+    const count = getCart().reduce((total, item) => total + item.quantity, 0);
+    document.querySelectorAll('.cart-count').forEach(el => {
+        el.textContent = count;
+    });
+    if (!pulse) return;
+    document.querySelectorAll('.cart-icon').forEach(icon => {
+        icon.classList.remove('cart-pulse');
+        void icon.offsetWidth;
+        icon.classList.add('cart-pulse');
+    });
+}
+
+function renderCart() {
+    const cart = getCart();
+    const itemsContainer = document.getElementById('cartItems');
+    const empty = document.getElementById('cartEmpty');
+    const total = document.getElementById('cartTotal');
+
+    if (!itemsContainer || !empty || !total) return;
+
+    if (!cart.length) {
+        itemsContainer.innerHTML = '';
+        empty.style.display = 'block';
+        total.textContent = 'Upon inquiry';
+        return;
+    }
+
+    empty.style.display = 'none';
+    itemsContainer.innerHTML = cart.map(item => {
+        const product = productData[item.id];
+        if (!product) return '';
+
+        return `
+            <div class="cart-item">
+                <img src="${product.image}" alt="${product.name}">
+                <div class="cart-item-body">
+                    <span>${product.ref}</span>
+                    <strong>${product.name}</strong>
+                    <small>${formatProductPrice(product)} · Qty ${item.quantity}</small>
+                    <button type="button" onclick="removeCartItem('${item.id}')">Remove</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const totalValue = cart.reduce((sum, item) => {
+        const product = productData[item.id];
+        return sum + ((product && product.price) ? product.price * item.quantity : 0);
+    }, 0);
+
+    total.textContent = totalValue ? formatCurrency(totalValue, 'USD') : 'Upon inquiry';
+}
+
+function openCartDrawer() {
+    renderCart();
+    const drawer = document.getElementById('cartDrawer');
+    if (!drawer) return;
+
+    drawer.classList.add('active');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCartDrawer() {
+    const drawer = document.getElementById('cartDrawer');
+    if (!drawer) return;
+
+    drawer.classList.remove('active');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+
+async function sendCartInquiry() {
+    syncCartSummaryField();
+    const cart = getCart();
+    const checkoutButton = document.querySelector('.cart-checkout');
+    const originalCheckoutText = checkoutButton ? checkoutButton.textContent : '';
+
+    if (!cart.length) {
+        openCartDrawer();
+        return;
+    }
+
+    if (checkoutButton) {
+        checkoutButton.disabled = true;
+        checkoutButton.textContent = 'CREATING SECURE CHECKOUT · 正在创建支付';
+    }
+
+    try {
+        const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items: cart })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.url) {
+            throw new Error(data.error || 'Checkout is not configured');
+        }
+        window.location.href = data.url;
+        return;
+    } catch (error) {
+        console.warn('Secure checkout unavailable, falling back to concierge inquiry:', error);
+    } finally {
+        if (checkoutButton) {
+            checkoutButton.disabled = false;
+            checkoutButton.textContent = originalCheckoutText;
+        }
+    }
+
+    closeCartDrawer();
+
+    const contactSection = document.querySelector('#contact');
+    if (!contactSection) {
+        localStorage.setItem('astraeus-pending-inquiry', JSON.stringify({
+            inquiry: 'I would like to confirm availability, final quotation, insured delivery, and checkout details for the selected pieces.',
+            selectedPiece: `Service reference: ${createServiceReference()}`,
+            cartSummary: getCartSummary()
+        }));
+        window.location.href = 'index.html#contact';
+        return;
+    }
+
+    const inquiry = document.querySelector('textarea[name="inquiry"]');
+    if (inquiry && !inquiry.value.trim()) {
+        inquiry.value = 'I would like to confirm availability, final quotation, insured delivery, and checkout details for the selected pieces.';
+    }
+
+    const reference = createServiceReference();
+    const selectedPiece = document.getElementById('selectedPiece');
+    if (selectedPiece) {
+        selectedPiece.value = `${selectedPiece.value ? selectedPiece.value + ' | ' : ''}Service reference: ${reference}`;
+    }
+
+    contactSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function requestProductInquiry(productId = currentProductId) {
+    const product = productData[productId];
+    if (!product) return;
+
+    const selectedPiece = document.getElementById('selectedPiece');
+    const inquiry = document.querySelector('textarea[name="inquiry"]');
+    const inquiryText = `I would like to inquire about ${product.ref} · ${product.name}. Please confirm availability, sizing, certificate, insured delivery, and final quotation.`;
+
+    if (!selectedPiece && !inquiry) {
+        localStorage.setItem('astraeus-pending-inquiry', JSON.stringify({
+            inquiry: inquiryText,
+            selectedPiece: `${product.ref} · ${product.name} · ${formatProductPrice(product)}`,
+            cartSummary: getCartSummary()
+        }));
+        window.location.href = 'index.html#contact';
+        return;
+    }
+
+    if (selectedPiece) {
+        selectedPiece.value = `${product.ref} · ${product.name} · ${formatProductPrice(product)}`;
+    }
+
+    if (inquiry && !inquiry.value.trim()) {
+        inquiry.value = inquiryText;
+    }
+
+    closeProductModal();
+}
+
+function syncCartSummaryField() {
+    const cartSummary = document.getElementById('cartSummary');
+    if (!cartSummary) return;
+
+    cartSummary.value = getCartSummary();
+}
+
+function getCartSummary() {
+    return getCart().map(item => {
+        const product = productData[item.id];
+        if (!product) return null;
+        return `${product.ref} · ${product.name} · ${formatProductPrice(product)} · Qty ${item.quantity} · ${product.leadTime}`;
+    }).filter(Boolean).join('\n');
+}
+
+function applyPendingInquiry() {
+    const pendingRaw = localStorage.getItem('astraeus-pending-inquiry');
+    if (!pendingRaw) return;
+
+    const inquiry = document.querySelector('textarea[name="inquiry"]');
+    const selectedPiece = document.getElementById('selectedPiece');
+    const cartSummary = document.getElementById('cartSummary');
+    if (!inquiry && !selectedPiece && !cartSummary) return;
+
+    try {
+        const pending = JSON.parse(pendingRaw);
+        if (inquiry && pending.inquiry) inquiry.value = pending.inquiry;
+        if (selectedPiece && pending.selectedPiece) selectedPiece.value = pending.selectedPiece;
+        if (cartSummary && pending.cartSummary) cartSummary.value = pending.cartSummary;
+        localStorage.removeItem('astraeus-pending-inquiry');
+    } catch (error) {
+        localStorage.removeItem('astraeus-pending-inquiry');
+    }
+}
+
+function initTrackingSearch() {
+    const trackingForm = document.querySelector('.tracking-form');
+    if (!trackingForm) return;
+
+    trackingForm.addEventListener('submit', lookupTracking);
+}
+
+async function lookupTracking(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('trackingInput');
+    const result = document.getElementById('trackingResult');
+    if (!input || !result) return;
+
+    const value = input.value.trim();
+    if (!value) {
+        result.innerHTML = '<span>Please enter an order reference or tracking number.</span>';
+        return;
+    }
+
+    result.innerHTML = '<span>Looking up concierge record...</span>';
+
+    try {
+        const response = await fetch(`/api/tracking?reference=${encodeURIComponent(value)}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Tracking unavailable');
+
+        result.innerHTML = `
+            <span>${data.orderId} · ${data.fulfillmentStatus}</span>
+            <p>Payment: ${data.paymentStatus}. Order status: ${data.status}. ${data.trackingNumber ? `Tracking: ${data.carrierSlug || 'carrier'} ${data.trackingNumber}.` : 'Tracking number will appear after concierge dispatch.'}</p>
+        `;
+        return;
+    } catch (error) {
+        const savedReference = localStorage.getItem('astraeus-latest-reference');
+        const isKnownReference = savedReference && value.toUpperCase() === savedReference.toUpperCase();
+        const looksLikeOrder = /^AST[-\s]?\d{4}/i.test(value);
+
+        result.innerHTML = `
+            <span>${isKnownReference || looksLikeOrder ? 'Concierge status: Inquiry received' : 'Tracking request received'}</span>
+            <p>当前环境尚未连接订单数据库或物流 API。部署并配置 DATABASE_URL / AFTERSHIP_API_KEY 后，这里将显示实时订单与物流节点。</p>
+        `;
+    }
+}
+
+function initOrderPage() {
+    const orderDetail = document.getElementById('orderDetail');
+    if (!orderDetail) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get('id') || params.get('session_id');
+    if (!reference) {
+        orderDetail.innerHTML = '<p class="admin-empty">Missing order reference.</p>';
+        return;
+    }
+
+    renderOrderStatus(reference);
+}
+
+async function renderOrderStatus(reference) {
+    const orderDetail = document.getElementById('orderDetail');
+    if (!orderDetail) return;
+
+    orderDetail.innerHTML = '<p class="admin-empty">Loading order status...</p>';
+    try {
+        const response = await fetch(`/api/tracking?reference=${encodeURIComponent(reference)}`);
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Order not found');
+
+        orderDetail.innerHTML = `
+            <div class="order-status-card">
+                <span class="service-kicker">${data.orderId}</span>
+                <h1 class="detail-title">Order received</h1>
+                <div class="admin-row"><span>Status</span><strong>${data.status}</strong></div>
+                <div class="admin-row"><span>Payment</span><strong>${data.paymentStatus}</strong></div>
+                <div class="admin-row"><span>Fulfillment</span><strong>${data.fulfillmentStatus}</strong></div>
+                <div class="admin-row"><span>Tracking</span><strong>${data.trackingNumber || 'Pending concierge dispatch'}</strong></div>
+                <p class="cart-note">私人顾问会确认尺码、证书、保价物流和交付时间。</p>
+            </div>
+        `;
+    } catch (error) {
+        orderDetail.innerHTML = `<p class="admin-empty">${error.message}</p>`;
+    }
+}
+
+function initAdminPage() {
+    const adminApp = document.getElementById('adminApp');
+    if (!adminApp) return;
+
+    const tokenInput = document.getElementById('adminToken');
+    const loadButton = document.getElementById('loadOrdersButton');
+    if (loadButton) {
+        loadButton.addEventListener('click', () => loadAdminOrders(tokenInput?.value || ''));
+    }
+}
+
+async function loadAdminOrders(token) {
+    const adminOutput = document.getElementById('adminOrders');
+    if (!adminOutput) return;
+    adminOutput.innerHTML = '<p class="admin-empty">Loading orders...</p>';
+
+    try {
+        const response = await fetch('/api/admin/orders', {
+            headers: { 'x-admin-token': token }
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Unable to load orders');
+
+        if (!data.orders.length) {
+            adminOutput.innerHTML = '<p class="admin-empty">No orders yet.</p>';
+            return;
+        }
+
+        adminOutput.innerHTML = data.orders.map((order) => `
+            <article class="admin-order">
+                <div class="admin-order-head">
+                    <strong>${order.id}</strong>
+                    <span>${order.status} · ${order.payment_status} · ${order.fulfillment_status}</span>
+                </div>
+                <div class="admin-row"><span>Customer</span><strong>${order.customer_email || 'Unknown'}</strong></div>
+                <div class="admin-row"><span>Total</span><strong>${formatCurrency((order.total_cents || 0) / 100, order.currency || 'USD')}</strong></div>
+                <div class="admin-row"><span>Tracking</span><strong>${order.carrier_slug || '-'} ${order.tracking_number || ''}</strong></div>
+                <div class="admin-update">
+                    <input placeholder="Fulfillment status" data-field="fulfillmentStatus" data-order="${order.id}">
+                    <input placeholder="Carrier slug" data-field="carrierSlug" data-order="${order.id}">
+                    <input placeholder="Tracking number" data-field="trackingNumber" data-order="${order.id}">
+                    <button type="button" onclick="updateAdminOrder('${order.id}')">Update</button>
+                </div>
+            </article>
+        `).join('');
+        sessionStorage.setItem('astraeus-admin-token', token);
+    } catch (error) {
+        adminOutput.innerHTML = `<p class="admin-empty">${error.message}</p>`;
+    }
+}
+
+async function updateAdminOrder(orderId) {
+    const token = sessionStorage.getItem('astraeus-admin-token') || document.getElementById('adminToken')?.value || '';
+    const fields = document.querySelectorAll(`[data-order="${orderId}"]`);
+    const patch = { orderId };
+    fields.forEach((field) => {
+        if (field.value.trim()) patch[field.dataset.field] = field.value.trim();
+    });
+
+    const response = await fetch('/api/admin/update-order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-admin-token': token
+        },
+        body: JSON.stringify(patch)
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        alert(data.error || 'Update failed');
+        return;
+    }
+    await loadAdminOrders(token);
+}
+
+function createServiceReference() {
+    const date = new Date();
+    const reference = `AST-${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}`;
+    localStorage.setItem('astraeus-latest-reference', reference);
+    return reference;
+}
+
+function formatProductPrice(product) {
+    if (!product || !product.price) return 'Price upon inquiry';
+    return formatCurrency(product.price, product.currency || 'USD');
+}
+
+function formatCurrency(value, currency) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency,
+        maximumFractionDigits: 0
+    }).format(value);
+}
+
 // WeChat QR Toggle
 function toggleWechatQR() {
     const popup = document.getElementById('wechatQrPopup');
@@ -578,7 +1242,7 @@ document.addEventListener('click', (e) => {
     const popup = document.getElementById('wechatQrPopup');
     const wechatBtn = document.querySelector('.contact-float-btn.wechat');
 
-    if (popup && !popup.contains(e.target) && e.target !== wechatBtn && !wechatBtn.contains(e.target)) {
+    if (popup && wechatBtn && !popup.contains(e.target) && e.target !== wechatBtn && !wechatBtn.contains(e.target)) {
         popup.classList.remove('active');
     }
 });

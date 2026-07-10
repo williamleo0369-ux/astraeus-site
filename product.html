@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRAEUS & CO. | Product Detail</title>
+    <meta name="description" content="ASTRAEUS & CO. product detail, specifications, availability, and private checkout inquiry.">
+    <link rel="canonical" href="https://theastraeus.com/product.html">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='8' fill='%232C2C2C'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Noto+Serif+SC:wght@200;300;400;500&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="product-page">
+    <nav class="nav">
+        <a class="nav-brand" href="index.html#maison">
+            <svg class="nav-icon" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="2" fill="currentColor"/>
+                <line x1="20" y1="4" x2="20" y2="12" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="20" y1="28" x2="20" y2="36" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="4" y1="20" x2="12" y2="20" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="28" y1="20" x2="36" y2="20" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="8.7" y1="8.7" x2="14.4" y2="14.4" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="25.6" y1="25.6" x2="31.3" y2="31.3" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="31.3" y1="8.7" x2="25.6" y2="14.4" stroke="currentColor" stroke-width="0.5"/>
+                <line x1="14.4" y1="25.6" x2="8.7" y2="31.3" stroke="currentColor" stroke-width="0.5"/>
+            </svg>
+            <span class="nav-title">ASTRAEUS & CO.</span>
+        </a>
+        <div class="nav-menu">
+            <a href="index.html#collection" class="nav-link">Collection</a>
+            <a href="index.html#services" class="nav-link">Service</a>
+            <a href="index.html#contact" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <button class="cart-icon" type="button" onclick="openCartDrawer()" aria-label="Open cart">
+                <span class="cart-diamond"></span>
+                <span class="cart-count">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="product-detail" id="productDetail">
+        <a class="detail-back" href="index.html#collection">← COLLECTION</a>
+        <section class="detail-grid">
+            <div class="detail-gallery">
+                <img id="detailImage" src="" alt="" class="detail-image">
+            </div>
+            <article class="detail-panel">
+                <span class="modal-ref" id="detailRef"></span>
+                <h1 class="detail-title" id="detailTitle"></h1>
+                <span class="detail-title-cn" id="detailTitleCn"></span>
+                <div class="modal-commerce" id="detailCommerce"></div>
+
+                <div class="detail-actions">
+                    <button class="modal-cta modal-buy" id="detailBuyButton" type="button">ADD TO CART · 加入购物车</button>
+                    <button class="modal-cta modal-inquiry" id="detailInquiryButton" type="button">REQUEST INFORMATION · 咨询详情</button>
+                </div>
+
+                <div class="detail-section">
+                    <span class="deterministic-label">SPECIFICATIONS · 作品参数</span>
+                    <div class="modal-specs" id="detailSpecs"></div>
+                </div>
+
+                <div class="modal-deterministic detail-craft">
+                    <span class="deterministic-label">CRAFT SPECIFICATIONS · 工艺参数</span>
+                    <p class="deterministic-desc">Precision measured craft parameters</p>
+                    <div class="deterministic-values" id="detailDeterministic"></div>
+                </div>
+
+                <div class="detail-service-note">
+                    <span>CONCIERGE PROCESS</span>
+                    <p>加入购物车后将进入订单意向确认；最终价格、尺码、证书、保价物流和支付链接由私人顾问确认。</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div class="cart-drawer" id="cartDrawer" aria-hidden="true">
+        <div class="cart-backdrop" onclick="closeCartDrawer()"></div>
+        <aside class="cart-panel" aria-label="Shopping cart">
+            <div class="cart-header">
+                <div>
+                    <span class="cart-kicker">ASTRAEUS CART</span>
+                    <h2 class="cart-title">Selection</h2>
+                </div>
+                <button class="cart-close" type="button" onclick="closeCartDrawer()" aria-label="Close cart">×</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-empty" id="cartEmpty">
+                <span>NO PIECES SELECTED</span>
+                <p>从典藏系列中选择可售作品，或提交私洽需求。</p>
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total-row">
+                    <span>Estimated total</span>
+                    <strong id="cartTotal">Upon inquiry</strong>
+                </div>
+                <p class="cart-note">价格为线上意向价，最终金额以材质、尺码、库存与顾问确认后为准。</p>
+                <button class="cart-checkout" type="button" onclick="sendCartInquiry()">SECURE CHECKOUT · 安全支付</button>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
