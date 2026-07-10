@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,32 +13,32 @@
 <body class="product-page">
     <main class="admin-shell" id="adminApp">
         <div class="admin-header">
-            <span class="service-kicker">ASTRAEUS OPERATIONS</span>
-            <h1 class="detail-title">Operations Admin</h1>
-            <p class="cart-note">Use the private admin token from Vercel env vars. Do not share this page publicly.</p>
+            <span class="service-kicker">阿斯特拉乌斯行动</span>
+            <h1 class="detail-title">运营管理</h1>
+            <p class="cart-note">请输入 Vercel 环境变量中的私有管理员令牌。请勿公开分享此页面。</p>
         </div>
 
         <div class="admin-controls">
             <input id="adminToken" class="tracking-input" type="password" placeholder="ADMIN_API_TOKEN">
-            <button id="checkConfigButton" class="tracking-submit" type="button">CHECK SETUP</button>
-            <button id="loadOrdersButton" class="tracking-submit" type="button">LOAD ORDERS</button>
-            <button id="loadInquiriesButton" class="tracking-submit" type="button">LOAD INQUIRIES</button>
-            <button id="exportInquiriesButton" class="tracking-submit" type="button">EXPORT CSV</button>
+            <button id="checkConfigButton" class="tracking-submit" type="button">检查配置</button>
+            <button id="loadOrdersButton" class="tracking-submit" type="button">加载订单</button>
+            <button id="loadInquiriesButton" class="tracking-submit" type="button">加载询盘</button>
+            <button id="exportInquiriesButton" class="tracking-submit" type="button">导出询盘 CSV</button>
         </div>
 
         <section id="adminConfig" class="admin-config">
-            <p class="admin-empty">Check setup before enabling live checkout.</p>
+            <p class="admin-empty">上线真实收款前，请先检查配置。</p>
         </section>
 
         <section id="adminOrders" class="admin-orders">
-            <p class="admin-empty">Enter admin token to load orders.</p>
+            <p class="admin-empty">输入管理员令牌后可加载订单。</p>
         </section>
 
         <section id="adminInquiries" class="admin-orders">
-            <p class="admin-empty">Load inquiries to view private form submissions.</p>
+            <p class="admin-empty">点击“加载询盘”查看官网表单提交。</p>
         </section>
     </main>
 
-    <script src="script.js?v=20260710-inquiries"></script>
+    <script src="script.js?v=20260710-admin-copy"></script>
 </body>
 </html>
