@@ -16,6 +16,23 @@ async function readInquiryPayload(req) {
     return Object.fromEntries(new URLSearchParams(raw));
   }
 
+  if (contentType.includes('multipart/form-data')) {
+    const boundary = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/)?.[1] || contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/)?.[2];
+    if (!boundary) return {};
+
+    const fields = {};
+    raw.split(`--${boundary}`).forEach((part) => {
+      const [rawHeaders, ...bodyParts] = part.split('\r\n\r\n');
+      if (!rawHeaders || !bodyParts.length) return;
+
+      const name = rawHeaders.match(/name="([^"]+)"/)?.[1];
+      if (!name) return;
+
+      fields[name] = bodyParts.join('\r\n\r\n').replace(/\r\n--$/, '').replace(/\r\n$/, '');
+    });
+    return fields;
+  }
+
   return {};
 }
 
