@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       params.set(`line_items[${index}][price_data][product_data][name]`, `${item.ref} · ${item.name}`);
       params.set(`line_items[${index}][price_data][product_data][description]`, `${item.nameCn} · ${item.leadTime} · ${item.fulfillment}`);
       params.set(`line_items[${index}][price_data][product_data][metadata][product_id]`, item.id);
-      params.set(`line_items[${index}][price_data][product_data][images][0]`, `${siteUrl}/${item.image}`);
+      params.set(`line_items[${index}][price_data][product_data][images][0]`, encodeURI(`${siteUrl}/${item.image}`));
     });
 
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
