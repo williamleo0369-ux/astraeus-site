@@ -944,7 +944,7 @@ async function sendCartInquiry() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ items: cart })
         });
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok || !data.url) {
             throw new Error(data.error || 'Checkout is not configured');
         }
@@ -1074,13 +1074,10 @@ async function lookupTracking(event) {
 
     try {
         const response = await fetch(`/api/tracking?reference=${encodeURIComponent(value)}`);
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Tracking unavailable');
 
-        result.innerHTML = `
-            <span>${data.orderId} · ${data.fulfillmentStatus}</span>
-            <p>Payment: ${data.paymentStatus}. Order status: ${data.status}. ${data.trackingNumber ? `Tracking: ${data.carrierSlug || 'carrier'} ${data.trackingNumber}.` : 'Tracking number will appear after concierge dispatch.'}</p>
-        `;
+        result.innerHTML = renderTrackingSummary(data);
         return;
     } catch (error) {
         const savedReference = localStorage.getItem('astraeus-latest-reference');
@@ -1105,6 +1102,11 @@ function initOrderPage() {
         return;
     }
 
+    if (params.get('session_id')) {
+        localStorage.removeItem(CART_STORAGE_KEY);
+        updateCartCount();
+    }
+
     renderOrderStatus(reference);
 }
 
@@ -1115,22 +1117,20 @@ async function renderOrderStatus(reference) {
     orderDetail.innerHTML = '<p class="admin-empty">Loading order status...</p>';
     try {
         const response = await fetch(`/api/tracking?reference=${encodeURIComponent(reference)}`);
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Order not found');
 
         orderDetail.innerHTML = `
             <div class="order-status-card">
-                <span class="service-kicker">${data.orderId}</span>
+                <span class="service-kicker">${escapeHtml(data.orderId)}</span>
                 <h1 class="detail-title">Order received</h1>
-                <div class="admin-row"><span>Status</span><strong>${data.status}</strong></div>
-                <div class="admin-row"><span>Payment</span><strong>${data.paymentStatus}</strong></div>
-                <div class="admin-row"><span>Fulfillment</span><strong>${data.fulfillmentStatus}</strong></div>
-                <div class="admin-row"><span>Tracking</span><strong>${data.trackingNumber || 'Pending concierge dispatch'}</strong></div>
+                ${renderTrackingSummary(data)}
+                ${renderOrderTimeline(data.events || [])}
                 <p class="cart-note">私人顾问会确认尺码、证书、保价物流和交付时间。</p>
             </div>
         `;
     } catch (error) {
-        orderDetail.innerHTML = `<p class="admin-empty">${error.message}</p>`;
+        orderDetail.innerHTML = `<p class="admin-empty">${escapeHtml(error.message)}</p>`;
     }
 }
 
@@ -1140,8 +1140,16 @@ function initAdminPage() {
 
     const tokenInput = document.getElementById('adminToken');
     const loadButton = document.getElementById('loadOrdersButton');
+    const savedToken = sessionStorage.getItem('astraeus-admin-token');
+    if (tokenInput && savedToken) tokenInput.value = savedToken;
+
     if (loadButton) {
         loadButton.addEventListener('click', () => loadAdminOrders(tokenInput?.value || ''));
+    }
+    if (tokenInput) {
+        tokenInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') loadAdminOrders(tokenInput.value || '');
+        });
     }
 }
 
@@ -1154,7 +1162,7 @@ async function loadAdminOrders(token) {
         const response = await fetch('/api/admin/orders', {
             headers: { 'x-admin-token': token }
         });
-        const data = await response.json();
+        const data = await readApiJson(response);
         if (!response.ok) throw new Error(data.error || 'Unable to load orders');
 
         if (!data.orders.length) {
@@ -1165,23 +1173,31 @@ async function loadAdminOrders(token) {
         adminOutput.innerHTML = data.orders.map((order) => `
             <article class="admin-order">
                 <div class="admin-order-head">
-                    <strong>${order.id}</strong>
-                    <span>${order.status} · ${order.payment_status} · ${order.fulfillment_status}</span>
+                    <strong>${escapeHtml(order.id)}</strong>
+                    <span>${escapeHtml(order.status)} · ${escapeHtml(order.payment_status)} · ${escapeHtml(order.fulfillment_status)}</span>
                 </div>
-                <div class="admin-row"><span>Customer</span><strong>${order.customer_email || 'Unknown'}</strong></div>
+                <div class="admin-row"><span>Customer</span><strong>${escapeHtml(order.customer_email || 'Unknown')}</strong></div>
                 <div class="admin-row"><span>Total</span><strong>${formatCurrency((order.total_cents || 0) / 100, order.currency || 'USD')}</strong></div>
-                <div class="admin-row"><span>Tracking</span><strong>${order.carrier_slug || '-'} ${order.tracking_number || ''}</strong></div>
+                <div class="admin-row"><span>Tracking</span><strong>${escapeHtml(order.carrier_slug || '-')} ${escapeHtml(order.tracking_number || '')}</strong></div>
                 <div class="admin-update">
-                    <input placeholder="Fulfillment status" data-field="fulfillmentStatus" data-order="${order.id}">
-                    <input placeholder="Carrier slug" data-field="carrierSlug" data-order="${order.id}">
-                    <input placeholder="Tracking number" data-field="trackingNumber" data-order="${order.id}">
-                    <button type="button" onclick="updateAdminOrder('${order.id}')">Update</button>
+                    <select data-field="status" data-order="${escapeHtml(order.id)}">
+                        ${renderSelectOptions(['checkout_created', 'paid', 'processing', 'fulfilled', 'cancelled', 'refunded'], order.status)}
+                    </select>
+                    <select data-field="paymentStatus" data-order="${escapeHtml(order.id)}">
+                        ${renderSelectOptions(['unpaid', 'paid', 'refunded', 'failed'], order.payment_status)}
+                    </select>
+                    <select data-field="fulfillmentStatus" data-order="${escapeHtml(order.id)}">
+                        ${renderSelectOptions(['pending', 'preparing', 'dispatched', 'in_transit', 'delivered', 'exception'], order.fulfillment_status)}
+                    </select>
+                    <input placeholder="Carrier slug" value="${escapeHtml(order.carrier_slug || '')}" data-field="carrierSlug" data-order="${escapeHtml(order.id)}">
+                    <input placeholder="Tracking number" value="${escapeHtml(order.tracking_number || '')}" data-field="trackingNumber" data-order="${escapeHtml(order.id)}">
+                    <button type="button" onclick="updateAdminOrder('${escapeAttribute(order.id)}')">Update</button>
                 </div>
             </article>
         `).join('');
         sessionStorage.setItem('astraeus-admin-token', token);
     } catch (error) {
-        adminOutput.innerHTML = `<p class="admin-empty">${error.message}</p>`;
+        adminOutput.innerHTML = `<p class="admin-empty">${escapeHtml(error.message)}</p>`;
     }
 }
 
@@ -1190,7 +1206,7 @@ async function updateAdminOrder(orderId) {
     const fields = document.querySelectorAll(`[data-order="${orderId}"]`);
     const patch = { orderId };
     fields.forEach((field) => {
-        if (field.value.trim()) patch[field.dataset.field] = field.value.trim();
+        patch[field.dataset.field] = field.value.trim();
     });
 
     const response = await fetch('/api/admin/update-order', {
@@ -1201,12 +1217,80 @@ async function updateAdminOrder(orderId) {
         },
         body: JSON.stringify(patch)
     });
-    const data = await response.json();
+    const data = await readApiJson(response);
     if (!response.ok) {
         alert(data.error || 'Update failed');
         return;
     }
     await loadAdminOrders(token);
+}
+
+async function readApiJson(response) {
+    const text = await response.text();
+    if (!text) return {};
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return {
+            error: response.ok
+                ? 'The server returned an unreadable response.'
+                : 'The service is not available in this preview environment.'
+        };
+    }
+}
+
+function renderTrackingSummary(data) {
+    const trackingLine = data.trackingNumber
+        ? `${data.carrierSlug || 'carrier'} ${data.trackingNumber}`
+        : 'Pending concierge dispatch';
+    const checkpoint = data.aftership?.data?.checkpoint || data.aftership?.checkpoint;
+    const checkpointText = checkpoint
+        ? `${checkpoint.checkpoint_time || ''} ${checkpoint.location || ''} ${checkpoint.message || checkpoint.tag || ''}`.trim()
+        : '';
+
+    return `
+        <div class="tracking-summary">
+            <div class="admin-row"><span>Order</span><strong>${escapeHtml(data.orderId || '-')}</strong></div>
+            <div class="admin-row"><span>Status</span><strong>${escapeHtml(data.status || '-')}</strong></div>
+            <div class="admin-row"><span>Payment</span><strong>${escapeHtml(data.paymentStatus || '-')}</strong></div>
+            <div class="admin-row"><span>Fulfillment</span><strong>${escapeHtml(data.fulfillmentStatus || '-')}</strong></div>
+            <div class="admin-row"><span>Tracking</span><strong>${escapeHtml(trackingLine)}</strong></div>
+            ${checkpointText ? `<p class="tracking-checkpoint">${escapeHtml(checkpointText)}</p>` : ''}
+        </div>
+    `;
+}
+
+function renderOrderTimeline(events = []) {
+    if (!events.length) {
+        return '<div class="order-timeline"><span class="deterministic-label">TIMELINE · 履约记录</span><p class="cart-note">Timeline will update after payment and concierge processing.</p></div>';
+    }
+
+    return `
+        <div class="order-timeline">
+            <span class="deterministic-label">TIMELINE · 履约记录</span>
+            ${events.map((event) => `
+                <div class="timeline-item">
+                    <span>${escapeHtml(formatTimelineDate(event.created_at))}</span>
+                    <strong>${escapeHtml(event.message || event.type || 'Order update')}</strong>
+                    <p>${escapeHtml(event.type || '')}</p>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function formatTimelineDate(value) {
+    if (!value) return 'Pending';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleString('en-US', { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+
+function renderSelectOptions(options, currentValue) {
+    return options.map((option) => {
+        const selected = option === currentValue ? ' selected' : '';
+        return `<option value="${escapeAttribute(option)}"${selected}>${escapeHtml(option)}</option>`;
+    }).join('');
 }
 
 function createServiceReference() {
@@ -1227,6 +1311,20 @@ function formatCurrency(value, currency) {
         currency,
         maximumFractionDigits: 0
     }).format(value);
+}
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[char]);
+}
+
+function escapeAttribute(value) {
+    return escapeHtml(value).replace(/`/g, '&#96;');
 }
 
 // WeChat QR Toggle
