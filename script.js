@@ -1140,16 +1140,56 @@ function initAdminPage() {
 
     const tokenInput = document.getElementById('adminToken');
     const loadButton = document.getElementById('loadOrdersButton');
+    const configButton = document.getElementById('checkConfigButton');
     const savedToken = sessionStorage.getItem('astraeus-admin-token');
     if (tokenInput && savedToken) tokenInput.value = savedToken;
 
     if (loadButton) {
         loadButton.addEventListener('click', () => loadAdminOrders(tokenInput?.value || ''));
     }
+    if (configButton) {
+        configButton.addEventListener('click', () => loadAdminConfig(tokenInput?.value || ''));
+    }
     if (tokenInput) {
         tokenInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') loadAdminOrders(tokenInput.value || '');
+            if (event.key === 'Enter') loadAdminConfig(tokenInput.value || '');
         });
+    }
+}
+
+async function loadAdminConfig(token) {
+    const configOutput = document.getElementById('adminConfig');
+    if (!configOutput) return;
+    configOutput.innerHTML = '<p class="admin-empty">Checking production setup...</p>';
+
+    try {
+        const response = await fetch('/api/admin/config', {
+            headers: { 'x-admin-token': token }
+        });
+        const data = await readApiJson(response);
+        if (!response.ok) throw new Error(data.error || 'Unable to check setup');
+
+        sessionStorage.setItem('astraeus-admin-token', token);
+        configOutput.innerHTML = `
+            <article class="admin-config-card ${data.ready ? 'ready' : 'missing'}">
+                <div class="admin-order-head">
+                    <strong>${data.ready ? 'Production setup ready' : 'Setup incomplete'}</strong>
+                    <span>${data.ready ? 'READY' : `${data.missing.length} MISSING`}</span>
+                </div>
+                <div class="config-checks">
+                    ${data.checks.map((check) => `
+                        <div class="config-check ${check.configured ? 'ready' : 'missing'}">
+                            <span>${check.configured ? 'READY' : 'MISSING'}</span>
+                            <strong>${escapeHtml(check.label)}</strong>
+                            <p>${escapeHtml(check.key)} · ${escapeHtml(check.purpose)}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <p class="cart-note">AfterShip API version: ${escapeHtml(data.aftershipApiVersion || '2026-01')}</p>
+            </article>
+        `;
+    } catch (error) {
+        configOutput.innerHTML = `<p class="admin-empty">${escapeHtml(error.message)}</p>`;
     }
 }
 

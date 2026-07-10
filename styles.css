@@ -2203,6 +2203,7 @@ img {
 .order-detail,
 .admin-header,
 .admin-controls,
+.admin-config,
 .admin-orders {
     max-width: 860px;
 }
@@ -2215,9 +2216,64 @@ img {
 
 .admin-controls {
     display: grid;
-    grid-template-columns: minmax(220px, 1fr) auto;
+    grid-template-columns: minmax(220px, 1fr) auto auto;
     gap: var(--space-sm);
     margin: var(--space-lg) 0;
+}
+
+.admin-config {
+    margin-bottom: var(--space-md);
+}
+
+.admin-config-card {
+    border-top: 0.5px solid var(--line-medium);
+    padding: var(--space-md) 0;
+}
+
+.admin-config-card.ready .admin-order-head span {
+    color: #4D6B50;
+}
+
+.admin-config-card.missing .admin-order-head span,
+.config-check.missing span {
+    color: #9A5C48;
+}
+
+.config-checks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.config-check {
+    border: 0.5px solid var(--line-subtle);
+    padding: var(--space-sm);
+    min-height: 120px;
+}
+
+.config-check span {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    color: #4D6B50;
+    margin-bottom: var(--space-xs);
+}
+
+.config-check strong {
+    display: block;
+    font-family: var(--font-serif-en);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-xs);
+}
+
+.config-check p {
+    font-family: var(--font-serif-cn);
+    font-size: 0.76rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
 }
 
 .admin-empty {
@@ -2457,7 +2513,8 @@ img {
     }
 
     .admin-controls,
-    .admin-update {
+    .admin-update,
+    .config-checks {
         grid-template-columns: 1fr;
     }
 

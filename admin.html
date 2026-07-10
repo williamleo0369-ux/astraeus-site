@@ -20,8 +20,13 @@
 
         <div class="admin-controls">
             <input id="adminToken" class="tracking-input" type="password" placeholder="ADMIN_API_TOKEN">
+            <button id="checkConfigButton" class="tracking-submit" type="button">CHECK SETUP</button>
             <button id="loadOrdersButton" class="tracking-submit" type="button">LOAD ORDERS</button>
         </div>
+
+        <section id="adminConfig" class="admin-config">
+            <p class="admin-empty">Check setup before enabling live checkout.</p>
+        </section>
 
         <section id="adminOrders" class="admin-orders">
             <p class="admin-empty">Enter admin token to load orders.</p>
