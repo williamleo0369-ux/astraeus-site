@@ -801,6 +801,7 @@ function initProductDetailPage() {
 
     const image = document.getElementById('detailImage');
     const ref = document.getElementById('detailRef');
+    const galleryRef = document.getElementById('detailGalleryRef');
     const title = document.getElementById('detailTitle');
     const titleCn = document.getElementById('detailTitleCn');
     const commerce = document.getElementById('detailCommerce');
@@ -814,6 +815,7 @@ function initProductDetailPage() {
         image.alt = product.name;
     }
     if (ref) ref.textContent = product.ref;
+    if (galleryRef) galleryRef.textContent = product.ref;
     if (title) title.textContent = product.name;
     if (titleCn) titleCn.textContent = product.nameCn;
     if (commerce) {

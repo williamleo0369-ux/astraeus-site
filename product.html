@@ -46,6 +46,10 @@
         <section class="detail-grid">
             <div class="detail-gallery">
                 <img id="detailImage" src="" alt="" class="detail-image">
+                <div class="detail-gallery-caption">
+                    <span id="detailGalleryRef">ASTRAEUS ARCHIVE</span>
+                    <strong>INSPECTED FOR PRIVATE CHECKOUT</strong>
+                </div>
             </div>
             <article class="detail-panel">
                 <span class="modal-ref" id="detailRef"></span>
@@ -56,6 +60,29 @@
                 <div class="detail-actions">
                     <button class="modal-cta modal-buy" id="detailBuyButton" type="button">ADD TO CART · 加入购物车</button>
                     <button class="modal-cta modal-inquiry" id="detailInquiryButton" type="button">REQUEST INFORMATION · 咨询详情</button>
+                </div>
+
+                <div class="detail-purchase-flow" aria-label="Purchase process">
+                    <div>
+                        <span>01</span>
+                        <strong>选择作品</strong>
+                        <p>确认作品、数量与可售状态。</p>
+                    </div>
+                    <div>
+                        <span>02</span>
+                        <strong>安全结账</strong>
+                        <p>通过 Stripe 完成加密支付。</p>
+                    </div>
+                    <div>
+                        <span>03</span>
+                        <strong>顾问确认</strong>
+                        <p>确认尺码、证书和发票信息。</p>
+                    </div>
+                    <div>
+                        <span>04</span>
+                        <strong>保价配送</strong>
+                        <p>同步订单和物流追踪状态。</p>
+                    </div>
                 </div>
 
                 <div class="detail-section">
@@ -103,6 +130,6 @@
         </aside>
     </div>
 
-    <script src="script.js?v=20260710-inquiries"></script>
+    <script src="script.js?v=20260712-showcase"></script>
 </body>
 </html>
