@@ -2380,6 +2380,11 @@ img {
     color: var(--text-secondary);
 }
 
+.config-check .config-issue {
+    margin-top: var(--space-xs);
+    color: #9A5C48;
+}
+
 .admin-empty {
     font-family: var(--font-serif-cn);
     color: var(--text-secondary);

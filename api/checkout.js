@@ -2,6 +2,10 @@ import { getOrderTotals, getSellableLineItems } from '../lib/catalog.js';
 import { createOrder, markCheckoutFailed, setStripeSession } from '../lib/db.js';
 import { getSiteUrl, readJson, sendJson } from './_utils.js';
 
+function isTestStripeKey(value) {
+  return String(value || '').trim().replace(/^['"]|['"]$/g, '').startsWith('sk_test_');
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return sendJson(res, 405, { error: 'Method not allowed' });
@@ -12,6 +16,9 @@ export default async function handler(req, res) {
   try {
     if (!process.env.STRIPE_SECRET_KEY) {
       return sendJson(res, 500, { error: 'STRIPE_SECRET_KEY is not configured' });
+    }
+    if (process.env.VERCEL_ENV === 'production' && isTestStripeKey(process.env.STRIPE_SECRET_KEY)) {
+      return sendJson(res, 503, { error: 'Live Stripe payments are not configured yet. Please request a private checkout.' });
     }
 
     const body = await readJson(req);

@@ -33,16 +33,41 @@ const checks = [
   }
 ];
 
+function cleanEnv(value) {
+  return String(value || '').trim().replace(/^['"]|['"]$/g, '');
+}
+
+function getCheckResult(check) {
+  const value = cleanEnv(process.env[check.key]);
+  let configured = Boolean(value);
+  let issue = '';
+
+  if (check.key === 'STRIPE_SECRET_KEY' && configured) {
+    const isTestKey = value.startsWith('sk_test_');
+    const isLiveKey = value.startsWith('sk_live_');
+    if (process.env.VERCEL_ENV === 'production' && isTestKey) {
+      configured = false;
+      issue = 'Production is using a Stripe test key. Replace it with sk_live_ to remove Sandbox checkout.';
+    } else if (!isTestKey && !isLiveKey) {
+      configured = false;
+      issue = 'Stripe secret key must start with sk_live_ or sk_test_.';
+    }
+  }
+
+  return {
+    ...check,
+    configured,
+    issue
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return sendJson(res, 405, { error: 'Method not allowed' });
   }
   if (!requireAdmin(req, res)) return;
 
-  const results = checks.map((check) => ({
-    ...check,
-    configured: Boolean(process.env[check.key])
-  }));
+  const results = checks.map(getCheckResult);
   const missing = results.filter((check) => !check.configured).map((check) => check.key);
 
   return sendJson(res, 200, {

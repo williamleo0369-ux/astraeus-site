@@ -1221,6 +1221,7 @@ async function loadAdminConfig(token) {
                             <span>${check.configured ? 'READY' : 'MISSING'}</span>
                             <strong>${escapeHtml(check.label)}</strong>
                             <p>${escapeHtml(check.key)} · ${escapeHtml(check.purpose)}</p>
+                            ${check.issue ? `<p class="config-issue">${escapeHtml(check.issue)}</p>` : ''}
                         </div>
                     `).join('')}
                 </div>
