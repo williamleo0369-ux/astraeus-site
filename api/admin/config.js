@@ -30,6 +30,16 @@ const checks = [
     key: 'AFTERSHIP_API_KEY',
     label: 'AfterShip Tracking',
     purpose: 'Fetches live carrier checkpoint updates after dispatch.'
+  },
+  {
+    key: 'RESEND_API_KEY',
+    label: 'Email Notifications',
+    purpose: 'Sends inquiry and paid order alerts to your admin email.'
+  },
+  {
+    key: 'NOTIFICATION_EMAIL',
+    label: 'Notification Inbox',
+    purpose: 'Receives private inquiry and paid order alert emails.'
   }
 ];
 

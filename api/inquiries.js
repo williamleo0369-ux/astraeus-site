@@ -1,4 +1,5 @@
 import { createInquiry } from '../lib/db.js';
+import { notifyInquiryReceived } from '../lib/email.js';
 import { readJson, sendJson } from './_utils.js';
 
 async function readInquiryPayload(req) {
@@ -52,6 +53,7 @@ export default async function handler(req, res) {
       referer: req.headers.referer || null,
       ip: req.headers['x-forwarded-for']?.split(',')[0]?.trim() || null
     });
+    await notifyInquiryReceived(inquiry);
 
     return sendJson(res, 200, { ok: true, id: inquiry.id });
   } catch (error) {

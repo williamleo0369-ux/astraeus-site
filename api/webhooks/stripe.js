@@ -1,4 +1,5 @@
 import { markStripeCheckoutCompleted } from '../../lib/db.js';
+import { notifyOrderPaid } from '../../lib/email.js';
 import { verifyStripeSignature } from '../../lib/stripe-signature.js';
 
 export default {
@@ -16,7 +17,10 @@ export default {
 
       const event = JSON.parse(rawBody.toString('utf8'));
       if (event.type === 'checkout.session.completed') {
-        await markStripeCheckoutCompleted(event.data.object, event.id);
+        const order = await markStripeCheckoutCompleted(event.data.object, event.id);
+        if (order) {
+          await notifyOrderPaid(order);
+        }
       }
 
       return Response.json({ received: true });
