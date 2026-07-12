@@ -1,6 +1,16 @@
-import { markStripeCheckoutCompleted } from '../../lib/db.js';
+import { markCheckoutFailed, markStripeCheckoutCompleted } from '../../lib/db.js';
 import { notifyOrderPaid } from '../../lib/email.js';
 import { verifyStripeSignature } from '../../lib/stripe-signature.js';
+
+const PAID_CHECKOUT_EVENTS = new Set([
+  'checkout.session.completed',
+  'checkout.session.async_payment_succeeded'
+]);
+
+const FAILED_CHECKOUT_EVENTS = new Set([
+  'checkout.session.async_payment_failed',
+  'checkout.session.expired'
+]);
 
 export default {
   async fetch(request) {
@@ -16,10 +26,17 @@ export default {
       }
 
       const event = JSON.parse(rawBody.toString('utf8'));
-      if (event.type === 'checkout.session.completed') {
-        const order = await markStripeCheckoutCompleted(event.data.object, event.id);
+      const session = event.data?.object;
+
+      if (PAID_CHECKOUT_EVENTS.has(event.type)) {
+        const order = await markStripeCheckoutCompleted(session, event.id);
         if (order) {
           await notifyOrderPaid(order);
+        }
+      } else if (FAILED_CHECKOUT_EVENTS.has(event.type)) {
+        const orderId = session?.metadata?.order_id;
+        if (orderId) {
+          await markCheckoutFailed(orderId, event.type, `stripe:${event.id}`);
         }
       }
 

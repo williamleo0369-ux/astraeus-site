@@ -2,8 +2,15 @@ import { getOrderTotals, getSellableLineItems } from '../lib/catalog.js';
 import { createOrder, markCheckoutFailed, setStripeSession } from '../lib/db.js';
 import { getSiteUrl, readJson, sendJson } from './_utils.js';
 
+const STRIPE_API_VERSION = '2026-06-24.dahlia';
+
+function cleanStripeKey(value) {
+  return String(value || '').trim().replace(/^['"]|['"]$/g, '');
+}
+
 function isTestStripeKey(value) {
-  return String(value || '').trim().replace(/^['"]|['"]$/g, '').startsWith('sk_test_');
+  const key = cleanStripeKey(value);
+  return key.startsWith('sk_test_') || key.startsWith('rk_test_');
 }
 
 export default async function handler(req, res) {
@@ -14,10 +21,11 @@ export default async function handler(req, res) {
   let order = null;
 
   try {
-    if (!process.env.STRIPE_SECRET_KEY) {
+    const stripeKey = cleanStripeKey(process.env.STRIPE_SECRET_KEY);
+    if (!stripeKey) {
       return sendJson(res, 500, { error: 'STRIPE_SECRET_KEY is not configured' });
     }
-    if (process.env.VERCEL_ENV === 'production' && isTestStripeKey(process.env.STRIPE_SECRET_KEY)) {
+    if (process.env.VERCEL_ENV === 'production' && isTestStripeKey(stripeKey)) {
       return sendJson(res, 503, { error: 'Live Stripe payments are not configured yet. Please request a private checkout.' });
     }
 
@@ -40,8 +48,11 @@ export default async function handler(req, res) {
     params.set('mode', 'payment');
     params.set('success_url', `${siteUrl}/order.html?id=${encodeURIComponent(order.id)}&session_id={CHECKOUT_SESSION_ID}`);
     params.set('cancel_url', `${siteUrl}/product.html?id=${encodeURIComponent(lineItems[0].id)}`);
+    params.set('client_reference_id', order.id);
     params.set('metadata[order_id]', order.id);
     params.set('metadata[source]', 'astraeus-site');
+    params.set('payment_intent_data[metadata][order_id]', order.id);
+    params.set('payment_intent_data[metadata][source]', 'astraeus-site');
     params.set('shipping_address_collection[allowed_countries][0]', 'US');
     params.set('shipping_address_collection[allowed_countries][1]', 'GB');
     params.set('shipping_address_collection[allowed_countries][2]', 'CN');
@@ -63,8 +74,10 @@ export default async function handler(req, res) {
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
       method: 'POST',
       headers: {
-        authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
-        'content-type': 'application/x-www-form-urlencoded'
+        authorization: `Bearer ${stripeKey}`,
+        'content-type': 'application/x-www-form-urlencoded',
+        'idempotency-key': `checkout:${order.id}`,
+        'stripe-version': STRIPE_API_VERSION
       },
       body: params
     });

@@ -53,14 +53,14 @@ function getCheckResult(check) {
   let issue = '';
 
   if (check.key === 'STRIPE_SECRET_KEY' && configured) {
-    const isTestKey = value.startsWith('sk_test_');
-    const isLiveKey = value.startsWith('sk_live_');
+    const isTestKey = value.startsWith('sk_test_') || value.startsWith('rk_test_');
+    const isLiveKey = value.startsWith('sk_live_') || value.startsWith('rk_live_');
     if (process.env.VERCEL_ENV === 'production' && isTestKey) {
       configured = false;
-      issue = 'Production is using a Stripe test key. Replace it with sk_live_ to remove Sandbox checkout.';
+      issue = 'Production is using a Stripe test key. Replace it with rk_live_ or sk_live_ to remove Sandbox checkout.';
     } else if (!isTestKey && !isLiveKey) {
       configured = false;
-      issue = 'Stripe secret key must start with sk_live_ or sk_test_.';
+      issue = 'Stripe API key must start with rk_live_, rk_test_, sk_live_, or sk_test_.';
     }
   }
 
