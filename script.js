@@ -504,8 +504,8 @@ function openProductModal(productId) {
 
     const buyButton = document.querySelector('.modal-buy');
     if (buyButton) {
-        buyButton.disabled = !product.sellable;
-        buyButton.textContent = product.sellable ? 'ADD TO CART · 加入购物车' : 'PRIVATE QUOTATION · 私洽报价';
+        buyButton.disabled = false;
+        buyButton.textContent = productRequiresQuote(product) ? 'ADD TO CART · 加入询价车' : 'ADD TO CART · 加入购物车';
     }
 
     // Show modal
@@ -760,11 +760,6 @@ function addProductToCart(productId) {
     const product = productData[productId];
     if (!product) return;
 
-    if (!product.sellable) {
-        requestProductInquiry(productId);
-        return;
-    }
-
     const cart = getCart();
     const existing = cart.find(item => item.id === productId);
     if (existing) {
@@ -775,6 +770,21 @@ function addProductToCart(productId) {
 
     saveCart(cart);
     openCartDrawer();
+}
+
+function productRequiresQuote(product) {
+    return !product || !product.price;
+}
+
+function cartRequiresQuote(cart = getCart()) {
+    return cart.some((item) => productRequiresQuote(productData[item.id]));
+}
+
+function getCartCheckoutLabel(cart = getCart()) {
+    if (!cart.length) return 'SECURE CHECKOUT · 安全支付';
+    return cartRequiresQuote(cart)
+        ? 'REQUEST CART QUOTE · 提交购物车询价'
+        : 'SECURE CHECKOUT · 安全支付';
 }
 
 function initProductDetailPage() {
@@ -845,8 +855,8 @@ function initProductDetailPage() {
         `).join('');
     }
     if (buyButton) {
-        buyButton.disabled = !product.sellable;
-        buyButton.textContent = product.sellable ? 'ADD TO CART · 加入购物车' : 'PRIVATE QUOTATION · 私洽报价';
+        buyButton.disabled = false;
+        buyButton.textContent = productRequiresQuote(product) ? 'ADD TO CART · 加入询价车' : 'ADD TO CART · 加入购物车';
         buyButton.onclick = () => addProductToCart(productId);
     }
     if (inquiryButton) {
@@ -876,6 +886,8 @@ function renderCart() {
     const itemsContainer = document.getElementById('cartItems');
     const empty = document.getElementById('cartEmpty');
     const total = document.getElementById('cartTotal');
+    const checkoutButton = document.querySelector('.cart-checkout');
+    const cartNote = document.querySelector('.cart-summary .cart-note');
 
     if (!itemsContainer || !empty || !total) return;
 
@@ -883,6 +895,8 @@ function renderCart() {
         itemsContainer.innerHTML = '';
         empty.style.display = 'block';
         total.textContent = 'Upon inquiry';
+        if (checkoutButton) checkoutButton.textContent = getCartCheckoutLabel(cart);
+        if (cartNote) cartNote.textContent = '结账金额为所选作品价格；目的地关税、税费或特殊配送费用可能另行产生。';
         return;
     }
 
@@ -910,6 +924,12 @@ function renderCart() {
     }, 0);
 
     total.textContent = totalValue ? formatCurrency(totalValue, 'USD') : 'Upon inquiry';
+    if (checkoutButton) checkoutButton.textContent = getCartCheckoutLabel(cart);
+    if (cartNote) {
+        cartNote.textContent = cartRequiresQuote(cart)
+            ? '含价格面议作品；提交后私人顾问会确认最终报价、证书、税费与保价配送安排。'
+            : '结账金额为所选作品价格；目的地关税、税费或特殊配送费用可能另行产生。';
+    }
 }
 
 function openCartDrawer() {
@@ -942,29 +962,31 @@ async function sendCartInquiry() {
         return;
     }
 
-    if (checkoutButton) {
-        checkoutButton.disabled = true;
-        checkoutButton.textContent = 'CREATING SECURE CHECKOUT · 正在创建支付';
-    }
-
-    try {
-        const response = await fetch('/api/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items: cart })
-        });
-        const data = await readApiJson(response);
-        if (!response.ok || !data.url) {
-            throw new Error(data.error || 'Checkout is not configured');
-        }
-        window.location.href = data.url;
-        return;
-    } catch (error) {
-        console.warn('Secure checkout unavailable, falling back to concierge inquiry:', error);
-    } finally {
+    if (!cartRequiresQuote(cart)) {
         if (checkoutButton) {
-            checkoutButton.disabled = false;
-            checkoutButton.textContent = originalCheckoutText;
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = 'CREATING SECURE CHECKOUT · 正在创建支付';
+        }
+
+        try {
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: cart })
+            });
+            const data = await readApiJson(response);
+            if (!response.ok || !data.url) {
+                throw new Error(data.error || 'Checkout is not configured');
+            }
+            window.location.href = data.url;
+            return;
+        } catch (error) {
+            console.warn('Secure checkout unavailable, falling back to concierge inquiry:', error);
+        } finally {
+            if (checkoutButton) {
+                checkoutButton.disabled = false;
+                checkoutButton.textContent = originalCheckoutText;
+            }
         }
     }
 
