@@ -733,6 +733,16 @@ function initProductCommerceCards() {
 }
 
 function initCart() {
+    const itemsContainer = document.getElementById('cartItems');
+    if (itemsContainer && !itemsContainer.dataset.cartReady) {
+        itemsContainer.dataset.cartReady = 'true';
+        itemsContainer.addEventListener('click', (event) => {
+            const removeButton = event.target.closest('[data-remove-cart]');
+            if (!removeButton) return;
+            removeCartItem(removeButton.dataset.removeCart);
+        });
+    }
+
     updateCartCount();
     renderCart();
 }
@@ -907,12 +917,12 @@ function renderCart() {
 
         return `
             <div class="cart-item">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${escapeAttribute(product.image)}" alt="${escapeAttribute(product.name)}">
                 <div class="cart-item-body">
-                    <span>${product.ref}</span>
-                    <strong>${product.name}</strong>
-                    <small>${formatProductPrice(product)} · Qty ${item.quantity}</small>
-                    <button type="button" onclick="removeCartItem('${item.id}')">Remove</button>
+                    <span>${escapeHtml(product.ref)}</span>
+                    <strong>${escapeHtml(product.name)}</strong>
+                    <small>${escapeHtml(formatProductPrice(product))} · Qty ${escapeHtml(item.quantity)}</small>
+                    <button type="button" data-remove-cart="${escapeAttribute(item.id)}">Remove · 删除</button>
                 </div>
             </div>
         `;
